@@ -16,7 +16,7 @@ function [individual_best,fval_best,output] = jde(problem,options)
 
 %   output: .max_generation, .time_elapsed
 tic;
-disp('-----------Start adaptive differential evolution---------------')
+disp('-----------Start differential evolution---------------')
 m = problem.dimension;
 f = problem.objective;
 lb = problem.lb;
@@ -96,17 +96,25 @@ while generation <= max_generation
             matrix_crossover(i, :, generation) = matrix_population(i, :, generation);
             crossover_index = rand(1,m) < crossover_proba;
             matrix_crossover(i, crossover_index, generation) = matrix_mutation(i, crossover_index, generation);
-       
+       end
+
+       % 并行需要
+        matrix_population_temp   = zeros(size_population,m);  % 每一代的种群信息
+		matrix_fval_temp         = zeros(1, size_population);       % 每一代每个个体的适应度
+       parfor i = 1:size_population
             % selection, evaluate
             fval_crossover = f(matrix_crossover(i, :,generation));
             if fval_crossover <= matrix_fval(generation,i)
-                matrix_population(i, :,generation+1) = matrix_crossover(i, :,generation);
-                matrix_fval(generation + 1, i) = fval_crossover;
+                matrix_population_temp(i,:) = matrix_crossover(i, :,generation);
+                matrix_fval_temp(1,i) = fval_crossover;
             else
-                matrix_population(i, :,generation+1) = matrix_population(i, :,generation);
-                matrix_fval(generation + 1, i) = matrix_fval(generation,i);
+                matrix_population_temp(i,:) = matrix_population(i, :,generation);
+                matrix_fval_temp(1,i) = matrix_fval(generation,i);
             end
         end
+        matrix_population(:, :,generation+1) = matrix_population_temp;
+        matrix_fval(generation + 1, :) = matrix_fval_temp;
+        
 
         array_fval_best(generation) = min(matrix_fval(generation,:));
         array_fval_mean(generation) = mean(matrix_fval(generation,:));
