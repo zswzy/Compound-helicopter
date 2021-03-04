@@ -11,7 +11,7 @@ run init_build.m
 %% Search the best redundant variables under a specific velocity 3.2 adapting differential evolution jde
 
 number_of_U         = 131;
-array_U             = linspace(0,131,number_of_U);
+array_U             = linspace(0,130,number_of_U);
 matrix_trim_states  = zeros(number_of_U,27);
 % U,theta_0,theta_diff,theta_1c,theta_1s,theta,phi,v_i1,v_i2,Prop_theta_0,Prop_isEnable,theta_1c_diff,theta_1s_diff,delta_e,delta_r,v_01,v_02,beta_01,beta_1c1,beta_1s1,beta_02,beta_1c2,beta_1s2,power_total_LowerRotor,power_total_UpperRotor,power_total_Prop,power_total
 disp('---------开始迭代求解-----------')
@@ -50,7 +50,7 @@ for j = 1:number_of_U
     array_power_best                = ones(2,1)*inf;
 
     % jde options 
-    options.size_population     = 4;
+    options.size_population     = 40;
     options.max_generation      = 100;
     options.scale_parameter     = 0.7;
     options.scale_parameter_lb  = 0.1;
@@ -65,7 +65,7 @@ for j = 1:number_of_U
     % if propeller is enabled
     problem             = struct;
     problem.objective   = @(x) trim_power(Rotorcraft,nearest_initial_no_redundant,x(1),1,x(2),x(3),x(4),x(5));
-    problem.lb          = [0,deg2rad(-25),deg2rad(-30),deg2rad(-1),deg2rad(-1)];
+    problem.lb          = [0,deg2rad(-25),deg2rad(-30),deg2rad(-1),deg2rad(0)];
     problem.ub          = [deg2rad(40),deg2rad(25),deg2rad(30),deg2rad(1),deg2rad(4.5)];
     problem.dimension   = 5;
 
@@ -79,7 +79,7 @@ for j = 1:number_of_U
     if array_U(j) <= 50
         problem             = struct;
         problem.objective   = @(x) trim_power(Rotorcraft,nearest_initial_no_redundant,0,0,x(1),x(2),x(3),x(4));
-        problem.lb          = [deg2rad(-25),deg2rad(-30),deg2rad(-1),deg2rad(-1)];
+        problem.lb          = [deg2rad(-25),deg2rad(-30),deg2rad(-1),deg2rad(0)];
         problem.ub          = [deg2rad(25),deg2rad(30),deg2rad(1),deg2rad(4.5)];
         problem.dimension   = 4;
 
