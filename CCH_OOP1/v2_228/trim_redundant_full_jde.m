@@ -10,8 +10,8 @@ run init_build.m
 
 %% Search the best redundant variables under a specific velocity 3.2 adapting differential evolution jde
 
-number_of_U         = 1;
-array_U             = linspace(130,130,number_of_U);
+number_of_U         = 131;
+array_U             = linspace(0,130,number_of_U);
 matrix_trim_states  = zeros(number_of_U,27);
 % U,theta_0,theta_diff,theta_1c,theta_1s,theta,phi,v_i1,v_i2,Prop_theta_0,Prop_isEnable,theta_1c_diff,theta_1s_diff,delta_e,delta_r,v_01,v_02,beta_01,beta_1c1,beta_1s1,beta_02,beta_1c2,beta_1s2,power_total_LowerRotor,power_total_UpperRotor,power_total_Prop,power_total
 disp('---------开始迭代求解-----------')
@@ -50,7 +50,7 @@ for j = 1:number_of_U
     array_power_best                = ones(2,1)*inf;
 
     % jde options 
-    options.size_population     = 4;
+    options.size_population     = 30;
     options.max_generation      = 100;
     options.scale_parameter     = 0.7;
     options.scale_parameter_lb  = 0.1;
