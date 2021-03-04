@@ -146,7 +146,7 @@ for j = 1:number_of_U
                                     Rotorcraft.Prop.Power_total ...
                                     power_total];
     else
-        matrix_trim_states(j,:) = [array_U(j) nan*ones(1,20)];
+        matrix_trim_states(j,:) = [array_U(j) nan*ones(1,27)];
     end
     
     time_elapsed = toc;

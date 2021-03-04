@@ -47,7 +47,7 @@ matrix_inidivual_best = zeros(generation, m);                   % 每一代的�
 
 
 
-for i = 1:size_population
+parfor i = 1:size_population
     matrix_population(i, :,generation) = lb + (ub-lb) .* rand(1,m);
     matrix_fval(generation,i) = f(matrix_population(i, :, generation));
 end
