@@ -50,7 +50,7 @@ for j = 1:number_of_U
     array_power_best                = ones(2,1)*inf;
 
     % jde options 
-    options.size_population     = 4;
+    options.size_population     = 40;
     options.max_generation      = 100;
     options.scale_parameter     = 0.7;
     options.scale_parameter_lb  = 0.1;
@@ -65,7 +65,7 @@ for j = 1:number_of_U
     % if propeller is enabled
     problem             = struct;
     problem.objective   = @(x) trim_power(Rotorcraft,nearest_initial_no_redundant,x(1),1,x(2),x(3),x(4),x(5));
-    problem.lb          = [0,deg2rad(-25),deg2rad(-30),deg2rad(-1),deg2rad(-1)];
+    problem.lb          = [0,deg2rad(-25),deg2rad(-30),deg2rad(-1),deg2rad(0)];
     problem.ub          = [deg2rad(40),deg2rad(25),deg2rad(30),deg2rad(1),deg2rad(4.5)];
     problem.dimension   = 5;
 
@@ -79,7 +79,7 @@ for j = 1:number_of_U
     if array_U(j) <= 50
         problem             = struct;
         problem.objective   = @(x) trim_power(Rotorcraft,nearest_initial_no_redundant,0,0,x(1),x(2),x(3),x(4));
-        problem.lb          = [deg2rad(-25),deg2rad(-30),deg2rad(-1),deg2rad(-1)];
+        problem.lb          = [deg2rad(-25),deg2rad(-30),deg2rad(-1),deg2rad(0)];
         problem.ub          = [deg2rad(25),deg2rad(30),deg2rad(1),deg2rad(4.5)];
         problem.dimension   = 4;
 
