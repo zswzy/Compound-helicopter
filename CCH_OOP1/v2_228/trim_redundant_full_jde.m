@@ -4,7 +4,7 @@ clc
 h = 100; % flight altitude
 [~,~,~,rho] = atmosisa(h);
 table_trim_no_redundant_states = readtable('trim_result_no_redundant.csv');
-table_trim_redundant_prop_states = readtable('trim_result_redundent_prop_fmincon_04-Mar-2021 16:44:20');
+table_trim_redundant_prop_states = readtable('trim_result_redundent_prop_fmincon_03_04_16_44.csv');
 %% build object
 run init_build.m
 
@@ -153,5 +153,5 @@ VariableNames = {'U','theta_0','theta_diff','theta_1c','theta_1s','theta','phi',
                 'beta_01','beta_1c1','beta_1s1','beta_02','beta_1c2','beta_1s2', ...
                 'power_total_LowerRotor', 'power_total_UpperRotor', 'power_total_Prop' ,'power_total'};
 table_trim_states = array2table(matrix_trim_states,'VariableNames',VariableNames);
-filename = ['trim_result_redundent_full_jde_',datestr(datetime),'.csv'];
+filename = ['trim_result_redundent_full_jde_',datestr(now,'mm_dd_HH_MM'),'.csv'];
 writetable(table_trim_states,filename);
