@@ -4,6 +4,9 @@
 DoubleRotorHelicopter       = Helicopter();
 DoubleRotorHelicopter.GW    = 5500;
 DoubleRotorHelicopter.GWF   = 5500*9.81;
+DoubleRotorHelicopter.Ix    = 5518;
+DoubleRotorHelicopter.Iy    = 26844;
+DoubleRotorHelicopter.Iz    = 23048;
 
 % 下旋翼
 LowerRotor = RotorFixed('anticlockwise'); % 下旋翼逆时针转， 为默认情况

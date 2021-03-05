@@ -5,6 +5,10 @@ classdef Helicopter < handle
         
         GW;
         GWF;
+        
+        Ix;
+        Iy;
+        Iz;
     end
     properties (GetAccess = public)
         % 姿态
@@ -45,7 +49,6 @@ classdef Helicopter < handle
         M;
         N;
     end
-    
     
     methods
         function obj    = Helicopter()
