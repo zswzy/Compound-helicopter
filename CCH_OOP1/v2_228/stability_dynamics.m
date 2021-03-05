@@ -62,7 +62,6 @@ Rotorcraft.DoubleRotorHelicopter.q_dot     = 0;
 Rotorcraft.DoubleRotorHelicopter.r_dot     = 0;
 
 nearest_initial_no_redundant = table_trim_states{table_trim_states.U == fix(Rotorcraft.DoubleRotorHelicopter.U+1),2:9};
-% nearest_initial_no_redundant = [0.01,0,0,0,0,0,10,10];
 % x = [theta_0,theta_diff,theta_1c,theta_1s,theta,phi,v_i1,v_i2]
 options                 = optimset('Display','iter','TolFun',1e-15,'Maxiter',100,'Algorithm','levenberg-marquardt' ,'MaxFunEvals',20000);
 cell_InitialStates      = {nearest_initial_no_redundant [0.01,0,0,0,0,0,10,10],[0.01,0,0,0,0,0,3,3], ...
@@ -85,3 +84,5 @@ cell_InitialStates      = {nearest_initial_no_redundant [0.01,0,0,0,0,0,10,10],[
                                 deg2rad(0), ...         % theta_1c_diff
                                 deg2rad(0));            % theta_1s_diff
 info_dynamics(Rotorcraft)
+
+derivatives_primitive = calculate_derivatives_primitive(Rotorcraft,x_trim);
