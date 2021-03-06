@@ -50,7 +50,7 @@ for j = 1:number_of_U
     array_power_best                = ones(2,1)*inf;
 
     % jde options 
-    options.size_population     = 20;
+    options.size_population     = 24;
     options.max_generation      = 100;
     options.scale_parameter     = 0.7;
     options.scale_parameter_lb  = 0.1;
@@ -154,5 +154,5 @@ VariableNames = {'U','theta_0','theta_diff','theta_1c','theta_1s','theta','phi',
                 'beta_01','beta_1c1','beta_1s1','beta_02','beta_1c2','beta_1s2', ...
                 'power_total_LowerRotor', 'power_total_UpperRotor', 'power_total_Prop' ,'power_total'};
 table_trim_states = array2table(matrix_trim_states,'VariableNames',VariableNames);
-filename = ['trim_result_redundent_full_jde_fix_',datestr(now,'mm_dd_HH_MM'),'.csv'];
+filename = ['trim_result_redundant_full_jde_fix_',datestr(now,'mm_dd_HH_MM'),'.csv'];
 writetable(table_trim_states,filename);
