@@ -36,7 +36,7 @@ cell_InitialStates      = {nearest_initial_no_redundant [0.01,0,0,0,0,0,10,10],[
                                 2, ...                  % LowerRotor.inteference
                                 2, ...                  % UpperRotor.inteference
                                 deg2rad(20), ...        % Prop.theta_0
-                                0, ...                  % Prop.isEnable
+                                1, ...                  % Prop.isEnable
                                 1, ...                  % Fus.isEnable
                                 deg2rad(0), ...         % HorStab.delta_e
                                 1, ...                  % HorStab.isEnable
@@ -86,3 +86,5 @@ cell_InitialStates      = {nearest_initial_no_redundant [0.01,0,0,0,0,0,10,10],[
 info_dynamics(Rotorcraft)
 
 derivatives_primitive = calculate_derivatives_primitive(Rotorcraft,x_trim);
+
+[A,B] = calculate_AB(Rotorcraft,derivatives_primitive);

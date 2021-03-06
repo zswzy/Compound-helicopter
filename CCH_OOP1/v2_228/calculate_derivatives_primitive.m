@@ -22,15 +22,12 @@ Derivatives = struct;
 epsilon     = 1e-10; % differential parameter
 
 % calculate d()/d(theta_0)
-% Rotorcraft.DoubleRotorHelicopter.theta_0  = Rotorcraft.DoubleRotorHelicopter.theta_0 - epsilon;
 x_trim_theta_0_left       = x_trim;
 x_trim_theta_0_left(1)    = x_trim(1) - epsilon;
 [~,Fnet_theta_0_left]     = Aerodynamics_full_8var(Rotorcraft, x_trim_theta_0_left);
-% Rotorcraft.DoubleRotorHelicopter.theta_0  = Rotorcraft.DoubleRotorHelicopter.theta_0 + 2*epsilon;
 x_trim_theta_0_right      = x_trim;
 x_trim_theta_0_right(1)   = x_trim(1) + epsilon;
 [~,Fnet_theta_0_right]    = Aerodynamics_full_8var(Rotorcraft, x_trim_theta_0_right);
-% Rotorcraft.DoubleRotorHelicopter.theta_0  = Rotorcraft.DoubleRotorHelicopter.theta_0 - epsilon;
 d_dtheta_0 = (Fnet_theta_0_right - Fnet_theta_0_left)/(2*epsilon);
 Derivatives.dXdtheta_0 = d_dtheta_0(1);
 Derivatives.dYdtheta_0 = d_dtheta_0(2);
@@ -40,16 +37,12 @@ Derivatives.dMdtheta_0 = d_dtheta_0(5);
 Derivatives.dNdtheta_0 = d_dtheta_0(6);
 
 % calculate d()/d(theta_diff)
-% Rotorcraft.DoubleRotorHelicopter.theta_diff  = Rotorcraft.DoubleRotorHelicopter.theta_diff - epsilon;
 x_trim_theta_diff_left       = x_trim;
 x_trim_theta_diff_left(2)    = x_trim(2) - epsilon;
 [~,Fnet_theta_diff_left]     = Aerodynamics_full_8var(Rotorcraft, x_trim_theta_diff_left);
-% Rotorcraft.DoubleRotorHelicopter.theta_diff  = Rotorcraft.DoubleRotorHelicopter.theta_diff + 2*epsilon;
 x_trim_theta_diff_right      = x_trim;
 x_trim_theta_diff_right(2)   = x_trim(2) + epsilon;
-[~,Fnet_theta_diff_right]    = Aerodynamics_full_8var(Rotorcraft, x_trim_theta_diff_right);
-% Rotorcraft.DoubleRotorHelicopter.theta_diff  = Rotorcraft.DoubleRotorHelicopter.theta_diff - epsilon;
-d_dtheta_diff = (Fnet_theta_diff_right - Fnet_theta_diff_left)/(2*epsilon);
+[~,Fnet_theta_diff_right]    = Aerodynamics_full_8var(Rotorcraft, x_trim_theta_diff_right);d_dtheta_diff = (Fnet_theta_diff_right - Fnet_theta_diff_left)/(2*epsilon);
 Derivatives.dXdtheta_diff = d_dtheta_diff(1);
 Derivatives.dYdtheta_diff = d_dtheta_diff(2);
 Derivatives.dZdtheta_diff = d_dtheta_diff(3);
@@ -58,15 +51,12 @@ Derivatives.dMdtheta_diff = d_dtheta_diff(5);
 Derivatives.dNdtheta_diff = d_dtheta_diff(6);
 
 % calculate d()/d(theta_1c)
-% Rotorcraft.DoubleRotorHelicopter.theta_1c  = Rotorcraft.DoubleRotorHelicopter.theta_1c - epsilon;
 x_trim_theta_1c_left       = x_trim;
 x_trim_theta_1c_left(3)    = x_trim(3) - epsilon;
 [~,Fnet_theta_1c_left]     = Aerodynamics_full_8var(Rotorcraft, x_trim_theta_1c_left);
-% Rotorcraft.DoubleRotorHelicopter.theta_1c  = Rotorcraft.DoubleRotorHelicopter.theta_1c + 2*epsilon;
 x_trim_theta_1c_right      = x_trim;
 x_trim_theta_1c_right(3)   = x_trim(3) + epsilon;
 [~,Fnet_theta_1c_right]    = Aerodynamics_full_8var(Rotorcraft, x_trim_theta_1c_right);
-% Rotorcraft.DoubleRotorHelicopter.theta_1c  = Rotorcraft.DoubleRotorHelicopter.theta_1c - epsilon;
 d_dtheta_1c = (Fnet_theta_1c_right - Fnet_theta_1c_left)/(2*epsilon);
 Derivatives.dXdtheta_1c = d_dtheta_1c(1);
 Derivatives.dYdtheta_1c = d_dtheta_1c(2);
@@ -76,15 +66,12 @@ Derivatives.dMdtheta_1c = d_dtheta_1c(5);
 Derivatives.dNdtheta_1c = d_dtheta_1c(6);
 
 % calculate d()/d(theta_1s)
-% Rotorcraft.DoubleRotorHelicopter.theta_1s  = Rotorcraft.DoubleRotorHelicopter.theta_1s - epsilon;
 x_trim_theta_1s_left       = x_trim;
 x_trim_theta_1s_left(4)    = x_trim(4) - epsilon;
 [~,Fnet_theta_1s_left]     = Aerodynamics_full_8var(Rotorcraft, x_trim_theta_1s_left);
-% Rotorcraft.DoubleRotorHelicopter.theta_1s  = Rotorcraft.DoubleRotorHelicopter.theta_1s + 2*epsilon;
 x_trim_theta_1s_right      = x_trim;
 x_trim_theta_1s_right(4)   = x_trim(4) + epsilon;
 [~,Fnet_theta_1s_right]    = Aerodynamics_full_8var(Rotorcraft, x_trim_theta_1s_right);
-% Rotorcraft.DoubleRotorHelicopter.theta_1s  = Rotorcraft.DoubleRotorHelicopter.theta_1s - epsilon;
 d_dtheta_1s = (Fnet_theta_1s_right - Fnet_theta_1s_left)/(2*epsilon);
 Derivatives.dXdtheta_1s = d_dtheta_1s(1);
 Derivatives.dYdtheta_1s = d_dtheta_1s(2);
@@ -93,16 +80,89 @@ Derivatives.dLdtheta_1s = d_dtheta_1s(4);
 Derivatives.dMdtheta_1s = d_dtheta_1s(5);
 Derivatives.dNdtheta_1s = d_dtheta_1s(6);
 
+% calculate d()/d(theta_prop)
+Rotorcraft.Prop.theta_0 = Rotorcraft.Prop.theta_0 - epsilon;
+[~,Fnet_theta_prop_left]     = Aerodynamics_full_8var(Rotorcraft, x_trim);
+Rotorcraft.Prop.theta_0 = Rotorcraft.Prop.theta_0 + 2*epsilon;
+[~,Fnet_theta_prop_right]     = Aerodynamics_full_8var(Rotorcraft, x_trim);
+Rotorcraft.Prop.theta_0 = Rotorcraft.Prop.theta_0 - epsilon;
+d_dtheta_prop = (Fnet_theta_prop_right - Fnet_theta_prop_left)/(2*epsilon);
+Derivatives.dXdtheta_prop = d_dtheta_prop(1);
+Derivatives.dYdtheta_prop = d_dtheta_prop(2);
+Derivatives.dZdtheta_prop = d_dtheta_prop(3);
+Derivatives.dLdtheta_prop = d_dtheta_prop(4);
+Derivatives.dMdtheta_prop = d_dtheta_prop(5);
+Derivatives.dNdtheta_prop = d_dtheta_prop(6);
+
+% calculate d()/d(delta_e)
+Rotorcraft.HorStab.delta_e = Rotorcraft.HorStab.delta_e - epsilon;
+[~,Fnet_delta_e_left]     = Aerodynamics_full_8var(Rotorcraft, x_trim);
+Rotorcraft.HorStab.delta_e = Rotorcraft.HorStab.delta_e + 2*epsilon;
+[~,Fnet_delta_e_right]     = Aerodynamics_full_8var(Rotorcraft, x_trim);
+Rotorcraft.HorStab.delta_e = Rotorcraft.HorStab.delta_e - epsilon;
+d_ddelta_e = (Fnet_delta_e_right - Fnet_delta_e_left)/(2*epsilon);
+Derivatives.dXddelta_e = d_ddelta_e(1);
+Derivatives.dYddelta_e = d_ddelta_e(2);
+Derivatives.dZddelta_e = d_ddelta_e(3);
+Derivatives.dLddelta_e = d_ddelta_e(4);
+Derivatives.dMddelta_e = d_ddelta_e(5);
+Derivatives.dNddelta_e = d_ddelta_e(6);
+
+% calculate d()/d(delta_r)
+Rotorcraft.VerStab.delta_r = Rotorcraft.VerStab.delta_r - epsilon;
+[~,Fnet_delta_r_left]     = Aerodynamics_full_8var(Rotorcraft, x_trim);
+Rotorcraft.VerStab.delta_r = Rotorcraft.VerStab.delta_r + 2*epsilon;
+[~,Fnet_delta_r_right]     = Aerodynamics_full_8var(Rotorcraft, x_trim);
+Rotorcraft.VerStab.delta_r = Rotorcraft.VerStab.delta_r - epsilon;
+d_ddelta_r = (Fnet_delta_r_right - Fnet_delta_r_left)/(2*epsilon);
+Derivatives.dXddelta_r = d_ddelta_r(1);
+Derivatives.dYddelta_r = d_ddelta_r(2);
+Derivatives.dZddelta_r = d_ddelta_r(3);
+Derivatives.dLddelta_r = d_ddelta_r(4);
+Derivatives.dMddelta_r = d_ddelta_r(5);
+Derivatives.dNddelta_r = d_ddelta_r(6);
+
+% calculate d()/d(dtheta_1c_diff)
+Rotorcraft.LowerRotor.theta_1c_diff = Rotorcraft.LowerRotor.theta_1c_diff - epsilon;
+Rotorcraft.UpperRotor.theta_1c_diff = Rotorcraft.UpperRotor.theta_1c_diff - epsilon;
+[~,Fnet_theta_1c_diff_left]     = Aerodynamics_full_8var(Rotorcraft, x_trim);
+Rotorcraft.LowerRotor.theta_1c_diff = Rotorcraft.LowerRotor.theta_1c_diff + 2*epsilon;
+Rotorcraft.UpperRotor.theta_1c_diff = Rotorcraft.UpperRotor.theta_1c_diff + 2*epsilon;
+[~,Fnet_theta_1c_diff_right]     = Aerodynamics_full_8var(Rotorcraft, x_trim);
+Rotorcraft.LowerRotor.theta_1c_diff = Rotorcraft.LowerRotor.theta_1c_diff - epsilon;
+Rotorcraft.UpperRotor.theta_1c_diff = Rotorcraft.UpperRotor.theta_1c_diff - epsilon;
+d_dtheta_1c_diff = (Fnet_theta_1c_diff_right - Fnet_theta_1c_diff_left)/(2*epsilon);
+Derivatives.dXdtheta_1c_diff = d_dtheta_1c_diff(1);
+Derivatives.dYdtheta_1c_diff = d_dtheta_1c_diff(2);
+Derivatives.dZdtheta_1c_diff = d_dtheta_1c_diff(3);
+Derivatives.dLdtheta_1c_diff = d_dtheta_1c_diff(4);
+Derivatives.dMdtheta_1c_diff = d_dtheta_1c_diff(5);
+Derivatives.dNdtheta_1c_diff = d_dtheta_1c_diff(6);
+
+% calculate d()/d(dtheta_1s_diff)
+Rotorcraft.LowerRotor.theta_1s_diff = Rotorcraft.LowerRotor.theta_1s_diff - epsilon;
+Rotorcraft.UpperRotor.theta_1s_diff = Rotorcraft.UpperRotor.theta_1s_diff - epsilon;
+[~,Fnet_theta_1s_diff_left]     = Aerodynamics_full_8var(Rotorcraft, x_trim);
+Rotorcraft.LowerRotor.theta_1s_diff = Rotorcraft.LowerRotor.theta_1s_diff + 2*epsilon;
+Rotorcraft.UpperRotor.theta_1s_diff = Rotorcraft.UpperRotor.theta_1s_diff + 2*epsilon;
+[~,Fnet_theta_1s_diff_right]     = Aerodynamics_full_8var(Rotorcraft, x_trim);
+Rotorcraft.LowerRotor.theta_1s_diff = Rotorcraft.LowerRotor.theta_1s_diff - epsilon;
+Rotorcraft.UpperRotor.theta_1s_diff = Rotorcraft.UpperRotor.theta_1s_diff - epsilon;
+d_dtheta_1s_diff = (Fnet_theta_1s_diff_right - Fnet_theta_1s_diff_left)/(2*epsilon);
+Derivatives.dXdtheta_1s_diff = d_dtheta_1s_diff(1);
+Derivatives.dYdtheta_1s_diff = d_dtheta_1s_diff(2);
+Derivatives.dZdtheta_1s_diff = d_dtheta_1s_diff(3);
+Derivatives.dLdtheta_1s_diff = d_dtheta_1s_diff(4);
+Derivatives.dMdtheta_1s_diff = d_dtheta_1s_diff(5);
+Derivatives.dNdtheta_1s_diff = d_dtheta_1s_diff(6);
+
 % calculate d()/d(theta)
-% Rotorcraft.DoubleRotorHelicopter.theta  = Rotorcraft.DoubleRotorHelicopter.theta - epsilon;
 x_trim_theta_left       = x_trim;
 x_trim_theta_left(5)    = x_trim(5) - epsilon;
 [~,Fnet_theta_left]     = Aerodynamics_full_8var(Rotorcraft, x_trim_theta_left);
-% Rotorcraft.DoubleRotorHelicopter.theta  = Rotorcraft.DoubleRotorHelicopter.theta + 2*epsilon;
 x_trim_theta_right      = x_trim;
 x_trim_theta_right(5)   = x_trim(5) + epsilon;
 [~,Fnet_theta_right]    = Aerodynamics_full_8var(Rotorcraft, x_trim_theta_right);
-% Rotorcraft.DoubleRotorHelicopter.theta  = Rotorcraft.DoubleRotorHelicopter.theta - epsilon;
 d_dtheta = (Fnet_theta_right - Fnet_theta_left)/(2*epsilon);
 Derivatives.dXdtheta = d_dtheta(1);
 Derivatives.dYdtheta = d_dtheta(2);
@@ -112,15 +172,12 @@ Derivatives.dMdtheta = d_dtheta(5);
 Derivatives.dNdtheta = d_dtheta(6);
 
 % calculate d()/d(phi)
-% Rotorcraft.DoubleRotorHelicopter.phi  = Rotorcraft.DoubleRotorHelicopter.phi - epsilon;
 x_trim_phi_left       = x_trim;
 x_trim_phi_left(6)    = x_trim(6) - epsilon;
 [~,Fnet_phi_left]     = Aerodynamics_full_8var(Rotorcraft, x_trim_phi_left);
-% Rotorcraft.DoubleRotorHelicopter.phi  = Rotorcraft.DoubleRotorHelicopter.phi + 2*epsilon;
 x_trim_phi_right      = x_trim;
 x_trim_phi_right(6)   = x_trim(6) + epsilon;
 [~,Fnet_phi_right]    = Aerodynamics_full_8var(Rotorcraft, x_trim_phi_right);
-% Rotorcraft.DoubleRotorHelicopter.phi  = Rotorcraft.DoubleRotorHelicopter.phi - epsilon;
 d_dphi = (Fnet_phi_right - Fnet_phi_left)/(2*epsilon);
 Derivatives.dXdphi = d_dphi(1);
 Derivatives.dYdphi = d_dphi(2);

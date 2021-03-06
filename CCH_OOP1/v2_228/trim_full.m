@@ -461,7 +461,7 @@ cell_InitialStates      = {[0.01,0,0,0,0,0,10,10],[0.01,0,0,0,0,0,3,3], ...
                             
 %% Search the best redundant variables under a specific velocity 3.2 adapting differential evolution jde
  tic
-Rotorcraft.DoubleRotorHelicopter.U         = 80; 
+Rotorcraft.DoubleRotorHelicopter.U         = 48; 
 Rotorcraft.DoubleRotorHelicopter.V         = 0;
 Rotorcraft.DoubleRotorHelicopter.W         = 0;
 Rotorcraft.DoubleRotorHelicopter.U_dot     = 0;
@@ -502,7 +502,7 @@ toc
 
 % if propeller is NOT enabled
 options.size_population     = 20;
-options.max_generation      = 1;
+options.max_generation      = 100;
 options.scale_parameter     = 0.7;
 options.scale_parameter_lb  = 0.1;
 options.scale_parameter_ub  = 0.9;

@@ -9,6 +9,7 @@ classdef Helicopter < handle
         Ix;
         Iy;
         Iz;
+        Ixz;
     end
     properties (GetAccess = public)
         % 姿态
