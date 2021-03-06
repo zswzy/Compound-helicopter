@@ -61,7 +61,7 @@ theta_1c_diff_max   = deg2rad(1);
 theta_1s_diff_min   = 0;
 theta_1s_diff_max   = deg2rad(4.5);
 
-number_sample = 100000; % 样本数量
+number_sample = 30000; % 样本数量
 size_batch = 20; %并行池大小
 number_batch = number_sample/size_batch; 
 %number_sample_generated = 0; % 用于统计生产的样本数量
