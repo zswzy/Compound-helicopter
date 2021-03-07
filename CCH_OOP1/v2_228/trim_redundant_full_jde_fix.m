@@ -5,14 +5,15 @@ clc
 h = 100; % flight altitude
 [~,~,~,rho] = atmosisa(h);
 table_trim_no_redundant_states = readtable('trim_result_no_redundant.csv');
-table_trim_redundant_prop_states = readtable('trim_result_redundent_prop_fmincon_03_04_16_44.csv');
+table_trim_redundant_prop_states = readtable('trim_result_redundent_prop_fmincon.csv');
+table_origin = readtable('trim_result_redundant_full_jde_fix_03_07_16_36.csv');
 %% build object
 run init_build.m
 
 %% Search the best redundant variables under a specific velocity 3.2 adapting differential evolution jde
-array_U             = [43:51,64:130];
+array_U             = [37:130];
 [~,number_of_U]     = size(array_U);
-matrix_trim_states  = zeros(number_of_U,27);
+matrix_trim_states  = table_origin{:,:};
 % U,theta_0,theta_diff,theta_1c,theta_1s,theta,phi,v_i1,v_i2,Prop_theta_0,Prop_isEnable,theta_1c_diff,theta_1s_diff,delta_e,delta_r,v_01,v_02,beta_01,beta_1c1,beta_1s1,beta_02,beta_1c2,beta_1s2,power_total_LowerRotor,power_total_UpperRotor,power_total_Prop,power_total
 disp('---------开始迭代求解-----------')
 disp(datetime)
@@ -50,14 +51,14 @@ for j = 1:number_of_U
     array_power_best                = ones(2,1)*inf;
 
     % jde options 
-    options.size_population     = 24;
+    options.size_population     = 20;
     options.max_generation      = 100;
     options.scale_parameter     = 0.7;
     options.scale_parameter_lb  = 0.1;
     options.scale_parameter_ub  = 0.9;
-    options.scale_parameter_tau = 0.1;
+    options.scale_parameter_tau = 0.2;
     options.crossover_proba     = 0.3;
-    options.crossover_proba_tau = 0.1;
+    options.crossover_proba_tau = 0.2;
     
     % initial point for trimming
     %nearest_initial_redundant = table_trim_redundant_prop_states{table_trim_redundant_prop_states.U == fix(Rotorcraft.DoubleRotorHelicopter.U),2:9};
@@ -90,11 +91,11 @@ for j = 1:number_of_U
     power_best              = min(array_power_best);
     redundant_var_best      = array_redundant_var_best(find(array_power_best == power_best),:);
     redundant_var_best      = redundant_var_best(1,:);
-
+    
     % calculte the correspond trimmed variables
     % x = [theta_0,theta_diff,theta_1c,theta_1s,theta,phi,v_i1,v_i2]
     options                 = optimset('Display','iter','TolFun',1e-15,'Maxiter',100,'Algorithm','levenberg-marquardt' ,'MaxFunEvals',20000);
-    cell_InitialStates      = {[0.01,0,0,0,0,0,10,10],[0.01,0,0,0,0,0,3,3], ...
+    cell_InitialStates      = {nearest_initial_no_redundant,[0.01,0,0,0,0,0,10,10],[0.01,0,0,0,0,0,3,3], ...
                                 [0.1,0,0,0,0,0,10,10],[0.1,0,0,0,0,0,3,3], ...
                                 [0.2,0,0,0,0,0,10,10],[0.2,0,0,0,0,0,3,3], ...
                                 [0.3,0,0,0,0,0,10,10],[0.3,0,0,0,0,0,3,3]};
@@ -113,8 +114,9 @@ for j = 1:number_of_U
                                     1, ...                              % VerStab.isEnable
                                     redundant_var_best(5), ...          % theta_1c_diff
                                     redundant_var_best(6));             % theta_1s_diff
-     if exitflag > 0
-        matrix_trim_states(j,:) = [array_U(j) ...
+     
+     if exitflag > 0 && power_best < table_origin{table_origin.U == Rotorcraft.DoubleRotorHelicopter.U,27}
+        matrix_trim_states(find(matrix_trim_states(:,1)==array_U(j)),:) = [array_U(j) ...
                                     x ...
                                     redundant_var_best ... 
                                     Rotorcraft.LowerRotor.v_0 ...
@@ -132,6 +134,8 @@ for j = 1:number_of_U
     else
         matrix_trim_states(j,:) = [array_U(j) nan*ones(1,26)];
      end
+     
+     
     
     time_elapsed = toc;
     time_average = time_elapsed/j;
@@ -149,7 +153,7 @@ disp(datetime)
 
 %% 保存结果
 VariableNames = {'U','theta_0','theta_diff','theta_1c','theta_1s','theta','phi','v_i1','v_i2', ...
-                'Prop_theta_0','Prop_isEnable','theta_1c_diff','theta_1s_diff','delta_e','delta_r', ...
+                'Prop_theta_0','Prop_isEnable','delta_e','delta_r','theta_1c_diff','theta_1s_diff', ...
                 'v_01','v_02', ...
                 'beta_01','beta_1c1','beta_1s1','beta_02','beta_1c2','beta_1s2', ...
                 'power_total_LowerRotor', 'power_total_UpperRotor', 'power_total_Prop' ,'power_total'};

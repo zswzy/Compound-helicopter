@@ -46,7 +46,11 @@ cell_InitialStates      = {nearest_initial_no_redundant [0.01,0,0,0,0,0,10,10],[
 info_dynamics(Rotorcraft)
 
 %% redundant trimming file integrate
-cell_files = {'trim_redundant_data_generation_03_07_05_17.csv','trim_redundant_data_generation_03_07_06_14.csv'};
+cell_files = {'trim_redundant_data_generation_03_07_05_17.csv', ...
+                'trim_redundant_data_generation_03_07_06_14.csv',...
+                'trim_redundant_data_generation_03_07_12_34.csv',...
+                'trim_redundant_data_generation_03_07_13_04.csv',...
+                'trim_redundant_data_generation_03_07_14_03.csv'};
 table_trim_redundant_full = readtable(cell_files{1});
 
 for cell_filename = cell_files(2:end)
@@ -56,5 +60,14 @@ end
 
 % delete nan
 table_trim_redundant_full(isnan(table_trim_redundant_full{:,end}),:) = [];
+filename = 'trim_redundant_data_integrate.csv';
+writetable(table_trim_redundant_full,filename);
 
+train_data = table_trim_redundant_full{:,[1,10:15]};
+train_label = table_trim_redundant_full{:,27};
+% % delete > 10^6
+train_data = train_data(find(train_label < 1e6),:);
+train_label = train_label(find(train_label < 1e6));
+
+% normalization
 
