@@ -4,7 +4,7 @@ clc
 h = 100;
 [~,~,~,rho] = atmosisa(h);
 table_trim_no_redundant_states = readtable('trim_result_no_redundant.csv');
-table_trim_redundant_prop_states = readtable('trim_result_redundent_prop_fmincon_03_04_16_44.csv');
+table_trim_redundant_prop_states = readtable('trim_result_redundent_prop_fmincon.csv');
 %% 建立对象
 
 run init_build.m
@@ -61,7 +61,7 @@ theta_1c_diff_max   = deg2rad(1);
 theta_1s_diff_min   = 0;
 theta_1s_diff_max   = deg2rad(4.5);
 
-number_sample = 5000; % 样本数量
+number_sample = 10000; % 样本数量
 size_batch = 20; %并行池大小
 number_batch = number_sample/size_batch; 
 matrix_trim_states = zeros(number_sample,27);
@@ -77,7 +77,7 @@ time_elapsed = 0;
 for k = 1:number_batch
 parfor j = 1+size_batch*(k-1):size_batch*k
     % 生成样本(冗余变量)
-    U = unifrnd(U_min,U_max);
+    U = randi(U_max-Umin);
     Prop_theta_0 = unifrnd(Prop_theta_0_min,Prop_theta_0_max);
     Prop_isEnable = randi(2)-1;
     delta_e = unifrnd(delta_e_min,delta_e_max);
