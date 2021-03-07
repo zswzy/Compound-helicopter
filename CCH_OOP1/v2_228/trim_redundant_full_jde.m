@@ -1,10 +1,10 @@
-% 3.2 Rotorcraft trim, full redundant (6 redundatn variables)
+% 3.2 Rotorcraft trim, full redundant (6 redundant variables)
 clear all
 clc
 h = 100; % flight altitude
 [~,~,~,rho] = atmosisa(h);
 table_trim_no_redundant_states = readtable('trim_result_no_redundant.csv');
-table_trim_redundant_prop_states = readtable('trim_result_redundent_prop_fmincon_03_04_16_44.csv');
+table_trim_redundant_prop_states = readtable('trim_result_redundent_prop_fmincon.csv');
 %% build object
 run init_build.m
 
@@ -13,7 +13,7 @@ run init_build.m
 number_of_U         = 131;
 array_U             = linspace(0,130,number_of_U);
 matrix_trim_states  = zeros(number_of_U,27);
-% U,theta_0,theta_diff,theta_1c,theta_1s,theta,phi,v_i1,v_i2,Prop_theta_0,Prop_isEnable,theta_1c_diff,theta_1s_diff,delta_e,delta_r,v_01,v_02,beta_01,beta_1c1,beta_1s1,beta_02,beta_1c2,beta_1s2,power_total_LowerRotor,power_total_UpperRotor,power_total_Prop,power_total
+% U,theta_0,theta_diff,theta_1c,theta_1s,theta,phi,v_i1,v_i2,Prop_theta_0,Prop_isEnable,delta_e,delta_r,theta_1c_diff,theta_1s_diff,v_01,v_02,beta_01,beta_1c1,beta_1s1,beta_02,beta_1c2,beta_1s2,power_total_LowerRotor,power_total_UpperRotor,power_total_Prop,power_total
 disp('---------开始迭代求解-----------')
 disp(datetime)
 bar = waitbar(0,'迭代求解中...');
@@ -60,7 +60,6 @@ for j = 1:number_of_U
     options.crossover_proba_tau = 0.1;
     
     % initial point for trimming
-    %nearest_initial_redundant = table_trim_redundant_prop_states{table_trim_redundant_prop_states.U == fix(Rotorcraft.DoubleRotorHelicopter.U),2:9};
     nearest_initial_no_redundant = table_trim_no_redundant_states{table_trim_no_redundant_states.U == fix(Rotorcraft.DoubleRotorHelicopter.U),2:9};
     % if propeller is enabled
     problem             = struct;
@@ -149,7 +148,7 @@ disp(datetime)
 
 %% 保存结果
 VariableNames = {'U','theta_0','theta_diff','theta_1c','theta_1s','theta','phi','v_i1','v_i2', ...
-                'Prop_theta_0','Prop_isEnable','theta_1c_diff','theta_1s_diff','delta_e','delta_r', ...
+                'Prop_theta_0','Prop_isEnable','delta_e','delta_r','theta_1c_diff','theta_1s_diff', ...
                 'v_01','v_02', ...
                 'beta_01','beta_1c1','beta_1s1','beta_02','beta_1c2','beta_1s2', ...
                 'power_total_LowerRotor', 'power_total_UpperRotor', 'power_total_Prop' ,'power_total'};
