@@ -47,7 +47,7 @@ cell_InitialStates      = {nearest_initial_no_redundant [0.01,0,0,0,0,0,10,10],[
 info_dynamics(Rotorcraft)
 
 %% Search the required power under different propeller pitch
-Rotorcraft.DoubleRotorHelicopter.U         = 100; 
+Rotorcraft.DoubleRotorHelicopter.U         = 120; 
 Rotorcraft.DoubleRotorHelicopter.V         = 0;
 Rotorcraft.DoubleRotorHelicopter.W         = 0;
 Rotorcraft.DoubleRotorHelicopter.U_dot     = 0;
@@ -60,12 +60,12 @@ Rotorcraft.DoubleRotorHelicopter.p_dot     = 0;
 Rotorcraft.DoubleRotorHelicopter.q_dot     = 0;
 Rotorcraft.DoubleRotorHelicopter.r_dot     = 0;
 
-array_Prop_theta_0  = linspace(deg2rad(0),deg2rad(40),40);
+array_Prop_theta_0  = linspace(deg2rad(5),deg2rad(30),52);
 array_power         = zeros(size(array_Prop_theta_0));
 
 nearest_initial_no_redundant = table_trim_states{table_trim_states.U == fix(Rotorcraft.DoubleRotorHelicopter.U),2:9};
 x_trim_last = nearest_initial_no_redundant;
-for j = 1:40
+for j = 1:52
     ele_Prop_theta_0 = array_Prop_theta_0(j);
     % x = [theta_0,theta_diff,theta_1c,theta_1s,theta,phi,v_i1,v_i2]
     options                 = optimset('Display','iter','TolFun',1e-15,'Maxiter',100,'Algorithm','levenberg-marquardt' ,'MaxFunEvals',20000);
