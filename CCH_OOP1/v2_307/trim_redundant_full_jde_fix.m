@@ -5,13 +5,13 @@ clc
 h = 100; % flight altitude
 [~,~,~,rho] = atmosisa(h);
 table_trim_no_redundant_states = readtable('trim_result_no_redundant.csv');
-table_trim_redundant_prop_states = readtable('trim_result_redundent_prop_fmincon.csv');
-table_origin = readtable('trim_result_redundant_full_jde_fix_03_07_16_36.csv');
+table_trim_redundant_prop_states = readtable('trim_result_redundent_prop_simple.csv');
+table_origin = readtable('trim_result_redundant_full_jde_03_05_23_50.csv');
 %% build object
 run init_build.m
 
 %% Search the best redundant variables under a specific velocity 3.2 adapting differential evolution jde
-array_U             = [37:130];
+array_U             = 37:130;
 [~,number_of_U]     = size(array_U);
 matrix_trim_states  = table_origin{:,:};
 % U,theta_0,theta_diff,theta_1c,theta_1s,theta,phi,v_i1,v_i2,Prop_theta_0,Prop_isEnable,theta_1c_diff,theta_1s_diff,delta_e,delta_r,v_01,v_02,beta_01,beta_1c1,beta_1s1,beta_02,beta_1c2,beta_1s2,power_total_LowerRotor,power_total_UpperRotor,power_total_Prop,power_total

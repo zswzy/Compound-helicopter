@@ -15,7 +15,6 @@ function [individual_best,fval_best,output] = jde(problem,options)
 %   options.crossover_proba_tau
 
 %   output: .max_generation, .time_elapsed
-tic;
 disp('-----------Start differential evolution---------------')
 m = problem.dimension;
 f = problem.objective;

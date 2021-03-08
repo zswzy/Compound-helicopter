@@ -61,8 +61,8 @@ theta_1c_diff_max   = deg2rad(1);
 theta_1s_diff_min   = 0;
 theta_1s_diff_max   = deg2rad(4.5);
 
-number_sample = 10000; % 样本数量
-size_batch = 40; %并行池大小
+number_sample = 3000; % 样本数量
+size_batch = 30; %并行池大小
 number_batch = number_sample/size_batch; 
 matrix_trim_states = zeros(number_sample,27);
 % theta_0,theta_diff,theta_1c,theta_1s,theta,phi,v_i1,v_i2,Prop_theta_0,Prop_isEnable,delta_e,delta_r,theta_1c_diff,theta_1s_diff,U,v_01,v_02,beta_01,beta_1c1,beta_1s1,beta_02,beta_1c2,beta_1s2,power_total_LowerRotor,power_total_UpperRotor,power_total_Prop,power_total
@@ -77,7 +77,7 @@ time_elapsed = 0;
 for k = 1:number_batch
 parfor j = 1+size_batch*(k-1):size_batch*k
     % 生成样本(冗余变量)
-    U = U_min+randi(U_max+1-Umin)-1;
+    U = U_min+randi(U_max+1-U_min)-1;
     Prop_theta_0 = unifrnd(Prop_theta_0_min,Prop_theta_0_max);
     Prop_isEnable = randi(2)-1;
     delta_e = unifrnd(delta_e_min,delta_e_max);
