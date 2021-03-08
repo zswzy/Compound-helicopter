@@ -6,12 +6,12 @@ h = 100; % flight altitude
 [~,~,~,rho] = atmosisa(h);
 table_trim_no_redundant_states = readtable('trim_result_no_redundant.csv');
 table_trim_redundant_prop_states = readtable('trim_result_redundant_prop_simple.csv');
-table_origin = readtable('trim_result_redundant_full_jde_fix_03_08_11_27.csv');
+table_origin = readtable('trim_result_redundant_full_jde_fix_03_08_15_08.csv');
 %% build object
 run init_build.m
 
 %% Search the best redundant variables under a specific velocity 3.2 adapting differential evolution jde
-array_U             = [42:59,65:71,87:100];
+array_U             = [50,55,70:88];
 [~,number_of_U]     = size(array_U);
 matrix_trim_states  = table_origin{:,:};
 % U,theta_0,theta_diff,theta_1c,theta_1s,theta,phi,v_i1,v_i2,Prop_theta_0,Prop_isEnable,theta_1c_diff,theta_1s_diff,delta_e,delta_r,v_01,v_02,beta_01,beta_1c1,beta_1s1,beta_02,beta_1c2,beta_1s2,power_total_LowerRotor,power_total_UpperRotor,power_total_Prop,power_total
@@ -51,7 +51,7 @@ for j = 1:number_of_U
     array_power_best                = ones(2,1)*inf;
 
     % jde options 
-    options.size_population     = 30;
+    options.size_population     = 20;
     options.max_generation      = 100;
     options.scale_parameter     = 0.7;
     options.scale_parameter_lb  = 0.1;
@@ -115,7 +115,8 @@ for j = 1:number_of_U
                                     redundant_var_best(5), ...          % theta_1c_diff
                                     redundant_var_best(6));             % theta_1s_diff
      
-     if exitflag > 0 && power_best < table_origin{table_origin.U == Rotorcraft.DoubleRotorHelicopter.U,27}
+     %if exitflag > 0 && power_best < table_origin{table_origin.U == Rotorcraft.DoubleRotorHelicopter.U,27}
+     if 1   
         matrix_trim_states(find(matrix_trim_states(:,1)==array_U(j)),:) = [array_U(j) ...
                                     x ...
                                     redundant_var_best ... 
