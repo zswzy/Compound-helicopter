@@ -11,6 +11,7 @@ table_origin = readtable('trim_result_redundant_full_jde_fix_03_07_16_36.csv');
 run init_build.m
 
 %% Search the best redundant variables under a specific velocity 3.2 adapting differential evolution jde
+
 array_U             = 100:130;
 [~,number_of_U]     = size(array_U);
 matrix_trim_states  = table_origin{:,:};
