@@ -461,7 +461,8 @@ cell_InitialStates      = {[0.01,0,0,0,0,0,10,10],[0.01,0,0,0,0,0,3,3], ...
                             
 %% Search the best redundant variables under a specific velocity 3.2 adapting differential evolution jde
  tic
-Rotorcraft.DoubleRotorHelicopter.U         = 48; 
+ table_trim_no_redundant_states = readtable('trim_result_no_redundant.csv');
+Rotorcraft.DoubleRotorHelicopter.U         = 44; 
 Rotorcraft.DoubleRotorHelicopter.V         = 0;
 Rotorcraft.DoubleRotorHelicopter.W         = 0;
 Rotorcraft.DoubleRotorHelicopter.U_dot     = 0;
@@ -527,8 +528,9 @@ toc
 
 % calculte the correspond trimmed variables
 % x = [theta_0,theta_diff,theta_1c,theta_1s,theta,phi,v_i1,v_i2]
+nearest_initial_no_redundant = table_trim_no_redundant_states{table_trim_no_redundant_states.U == fix(Rotorcraft.DoubleRotorHelicopter.U),2:9};
 options                 = optimset('Display','iter','TolFun',1e-15,'Maxiter',100,'Algorithm','levenberg-marquardt' ,'MaxFunEvals',20000);
-cell_InitialStates      = {[0.01,0,0,0,0,0,10,10],[0.01,0,0,0,0,0,3,3], ...
+cell_InitialStates      = {nearest_initial_no_redundant,[0.01,0,0,0,0,0,10,10],[0.01,0,0,0,0,0,3,3], ...
                             [0.1,0,0,0,0,0,10,10],[0.1,0,0,0,0,0,3,3], ...
                             [0.2,0,0,0,0,0,10,10],[0.2,0,0,0,0,0,3,3], ...
                             [0.3,0,0,0,0,0,10,10],[0.3,0,0,0,0,0,3,3]};
