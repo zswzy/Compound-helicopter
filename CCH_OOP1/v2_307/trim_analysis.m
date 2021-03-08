@@ -2,7 +2,7 @@
 
 table_trim_no_redundant = readtable('trim_result_no_redundant.csv');
 table_trim_redundant_prop = readtable('trim_result_redundent_prop_simple.csv');
-table_trim_redundant_full = readtable('trim_result_redundent_full_jde_03_05_23_50.csv');
+table_trim_redundant_full = readtable('trim_result_redundant_full_jde_fix_03_08_11_27.csv');
 
 array_U = table_trim_no_redundant.U;
 power_total_no_redundant = table_trim_no_redundant.power_total/1000;

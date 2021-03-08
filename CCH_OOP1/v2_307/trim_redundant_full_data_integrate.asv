@@ -1,0 +1,16 @@
+% compare 2 file and integrate the best part
+
+table1 = readtable('trim_result_redundant_full_jde_03_05_23_50.csv');
+table2 = readtable('trim_result_redundant_full_jde_fix_03_08_04_05.csv'); % new
+table2(isnan(table2{:,end}),:) = [];
+
+% if size(table1) ~= size(table2)
+%     disp("size error")
+%     exit;
+% end
+
+[number_of_U,~] = size(table1);
+for j = 1:number_of_U
+    if table1{j,end} > table2{j,end}
+        table1(j,:) = table2(j,:);
+
