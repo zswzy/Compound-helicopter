@@ -1,7 +1,7 @@
 % 3.6 from 3 .csv file of trimming data, analysis and compare each other
 
 table_trim_no_redundant = readtable('trim_result_no_redundant.csv');
-table_trim_redundant_prop = readtable('trim_result_redundent_prop_simple.csv');
+table_trim_redundant_prop = readtable('trim_result_redundant_prop_simple.csv');
 table_trim_redundant_full = readtable('trim_result_redundant_full_jde_fix_03_08_11_27.csv');
 
 array_U = table_trim_no_redundant.U;
@@ -77,5 +77,5 @@ xlabel('U'); ylabel('\theta_{1s} (deg)'); title('U-\theta_{1s}'); legend('no red
 
 figure(4)
 plot(array_U,rad2deg(array_prop_theta_0_redundant_prop),'linewidth',2)
-legend('no redundant','redundant propeller')
+legend('redundant propeller')
 xlabel('U'); ylabel('\theta_{prop} (deg)'); title('U-\theta_{prop}');grid on
