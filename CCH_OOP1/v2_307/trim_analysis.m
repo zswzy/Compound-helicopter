@@ -5,33 +5,39 @@ table_trim_redundant_prop = readtable('trim_result_redundant_prop_simple.csv');
 table_trim_redundant_full = readtable('trim_result_redundant_full_jde_fix_03_08_17_49.csv');
 
 array_U = table_trim_no_redundant.U;
-power_total_no_redundant = table_trim_no_redundant.power_total/1000;
-power_total_redundant_prop = table_trim_redundant_prop.power_total/1000;
-power_total_redundant_full = table_trim_redundant_full.power_total/1000;
+power_total_no_redundant    = table_trim_no_redundant.power_total/1000;
+power_total_redundant_prop  = table_trim_redundant_prop.power_total/1000;
+power_total_redundant_full  = table_trim_redundant_full.power_total/1000;
 
-array_theta_no_redundant = table_trim_no_redundant.theta;
-array_theta_redundant_prop = table_trim_redundant_prop.theta;
-array_theta_redundant_full = table_trim_redundant_full.theta;
+array_theta_no_redundant    = rad2deg(table_trim_no_redundant.theta);
+array_theta_redundant_prop  = rad2deg(table_trim_redundant_prop.theta);
+array_theta_redundant_full  = rad2deg(table_trim_redundant_full.theta);
 
-array_phi_no_redundant = table_trim_no_redundant.phi;
-array_phi_redundant_prop = table_trim_redundant_prop.phi;
+array_phi_no_redundant      = rad2deg(table_trim_no_redundant.phi);
+array_phi_redundant_prop    = rad2deg(table_trim_redundant_prop.phi);
+array_phi_redundant_full    = rad2deg(table_trim_redundant_full.phi);
 
-array_theta_0_no_redundant = table_trim_no_redundant.theta_0;
-array_theta_0_redundant_prop = table_trim_redundant_prop.theta_0;
-array_theta_0_redundant_full = table_trim_redundant_full.theta_0;
+array_theta_0_no_redundant      = rad2deg(table_trim_no_redundant.theta_0);
+array_theta_0_redundant_prop    = rad2deg(table_trim_redundant_prop.theta_0);
+array_theta_0_redundant_full    = rad2deg(table_trim_redundant_full.theta_0);
 
-array_theta_diff_no_redundant = table_trim_no_redundant.theta_diff;
-array_theta_diff_redundant_prop = table_trim_redundant_prop.theta_diff;
+array_theta_diff_no_redundant   = rad2deg(table_trim_no_redundant.theta_diff);
+array_theta_diff_redundant_prop = rad2deg(table_trim_redundant_prop.theta_diff);
+array_theta_diff_redundant_full = rad2deg(table_trim_redundant_full.theta_diff);
 
-array_theta_1c_no_redundant = table_trim_no_redundant.theta_1c;
-array_theta_1c_redundant_prop = table_trim_redundant_prop.theta_1c;
+array_theta_1c_no_redundant     = rad2deg(table_trim_no_redundant.theta_1c);
+array_theta_1c_redundant_prop   = rad2deg(table_trim_redundant_prop.theta_1c);
+array_theta_1c_redundant_full   = rad2deg(table_trim_redundant_full.theta_1c);
 
-array_theta_1s_no_redundant = table_trim_no_redundant.theta_1s;
-array_theta_1s_redundant_prop = table_trim_redundant_prop.theta_1s;
+array_theta_1s_no_redundant     = rad2deg(table_trim_no_redundant.theta_1s);
+array_theta_1s_redundant_prop   = rad2deg(table_trim_redundant_prop.theta_1s);
+array_theta_1s_redundant_full   = rad2deg(table_trim_redundant_full.theta_1s);
 
-array_prop_theta_0_redundant_prop = table_trim_redundant_prop.Prop_theta_0;
+array_prop_theta_0_redundant_prop = rad2deg(table_trim_redundant_prop.Prop_theta_0);
+array_prop_theta_0_redundant_full = rad2deg(table_trim_redundant_full.Prop_theta_0);
 
 
+%%
 figure(1)
 plot(array_U,power_total_no_redundant,array_U,power_total_redundant_prop,'linewidth',2)
 legend('no redundant','redundant propeller')

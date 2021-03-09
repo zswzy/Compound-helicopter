@@ -1,5 +1,5 @@
-function [individual_best,fval_best,output] = jde(problem,options)
-%DE 此处显示有关此函数的摘要
+function [individual_best,fval_best,output] = jde_par(problem,options)
+%DE 
 %   input: problem
 %   problem.dimension: 变量维度
 %   problem.objective: 目标函数句柄
@@ -23,15 +23,15 @@ ub = problem.ub;
 
 % init
 if nargin == 1
-    size_population     = 20;
-    max_generation      = 10;
-    scale_parameter     = 0.7;
-    crossover_proba     = 0.3;
+    size_population         = 20;
+    max_generation          = 10;
+    scale_parameter         = 0.7;
+    crossover_proba         = 0.3;
 else
-    size_population     = options.size_population;
-    max_generation      = options.max_generation;
-    scale_parameter     = options.scale_parameter;
-    crossover_proba     = options.crossover_proba;
+    size_population         = options.size_population;
+    max_generation          = options.max_generation;
+    scale_parameter         = options.scale_parameter;
+    crossover_proba             = options.crossover_proba;
 end
 generation          = 1;
 matrix_population   = zeros(size_population,m,max_generation);  % 每一代的种群信息
@@ -99,8 +99,8 @@ while generation <= max_generation
 
        % 并行需要
         matrix_population_temp   = zeros(size_population,m);  % 每一代的种群信息
-		matrix_fval_temp         = zeros(1, size_population);       % 每一代每个个体的适应度
-       parfor i = 1:size_population
+        matrix_fval_temp         = zeros(1, size_population);       % 每一代每个个体的适应度
+        parfor i = 1:size_population
             % selection, evaluate
             fval_crossover = f(matrix_crossover(i, :,generation));
             if fval_crossover <= matrix_fval(generation,i)
