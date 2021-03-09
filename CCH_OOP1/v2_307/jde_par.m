@@ -141,6 +141,9 @@ output.max_generation = generation;
 output.time_elapsed = toc;
 
 disp('-----------Finish-------------------------------------')
+
+plot(1:generation-1,array_fval_best(1:generation-1))
+xlabel('generation');ylabel('fitness');title('iteration of differential evolution');grid on;
 end
 
 

@@ -462,7 +462,7 @@ cell_InitialStates      = {[0.01,0,0,0,0,0,10,10],[0.01,0,0,0,0,0,3,3], ...
 %% Search the best redundant variables under a specific velocity 3.2 adapting differential evolution jde
 tic
 table_trim_no_redundant_states = readtable('trim_result_no_redundant.csv');
-Rotorcraft.DoubleRotorHelicopter.U         = 84; 
+Rotorcraft.DoubleRotorHelicopter.U         = 60; 
 Rotorcraft.DoubleRotorHelicopter.V         = 0;
 Rotorcraft.DoubleRotorHelicopter.W         = 0;
 Rotorcraft.DoubleRotorHelicopter.U_dot     = 0;
@@ -555,7 +555,7 @@ cell_InitialStates      = {nearest_initial_no_redundant,[0.01,0,0,0,0,0,10,10],[
 %% 3.8 adapting differential evolution jde consider the trim state constrain
 tic
 table_trim_no_redundant_states = readtable('trim_result_no_redundant.csv');
-Rotorcraft.DoubleRotorHelicopter.U         = 84; 
+Rotorcraft.DoubleRotorHelicopter.U         = 70; 
 Rotorcraft.DoubleRotorHelicopter.V         = 0;
 Rotorcraft.DoubleRotorHelicopter.W         = 0;
 Rotorcraft.DoubleRotorHelicopter.U_dot     = 0;
