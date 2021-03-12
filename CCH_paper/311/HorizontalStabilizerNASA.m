@@ -17,7 +17,6 @@ classdef HorizontalStabilizerSimple <  Helicopter
         Omega;  % 旋翼转速
         rho;    % 大气密度
         R;      % 旋翼半径
-        A;      % 旋翼面积
 
     end
     
@@ -29,6 +28,8 @@ classdef HorizontalStabilizerSimple <  Helicopter
     end
     
     properties (Dependent)
+        A;      % 旋翼面积
+        
         q_HS;
         u_HS;
         v_HS;
@@ -50,6 +51,9 @@ classdef HorizontalStabilizerSimple <  Helicopter
             %   
         end
         %--------------Dependent变量---------------
+        function A              = get.A(obj)
+            A = pi*obj.R^2;
+        end
         function q_HS           = get.q_HS(obj)
             q_HS = 1/2*obj.rho*(obj.u_HS^2+obj.v_HS^2+obj.w_HS^2)*obj.K_HS;
         end
@@ -96,7 +100,7 @@ classdef HorizontalStabilizerSimple <  Helicopter
         function calculate_force(obj)
             %METHOD1 此处显示有关此方法的摘要
             array_mu = [0 0.1 0.21 0.31];
-            array_C_L_delta_e = 1e-5*[0    0.1 0.2 13];
+            array_C_L_delta_e = 1e-5*[0   0.1  0.2 13];
 
             C_L_delta_e = interp1(array_mu,array_C_L_delta_e,obj.mu,'spline','extrap');
             C_LHS = C_L_delta_e*rad2deg(obj.delta_e);
@@ -117,7 +121,7 @@ classdef HorizontalStabilizerSimple <  Helicopter
             C_mHS = C_m_delta_e*rad2deg(obj.delta_e);
 
             L_HS = 0;
-            M_HS = -C_mHS*obj.rho*obj.A*obj.VT^2*obj.R;
+            M_HS = C_mHS*obj.rho*obj.A*obj.VT^2*obj.R;
             N_HS = 0;
 
             obj.L = L_HS;

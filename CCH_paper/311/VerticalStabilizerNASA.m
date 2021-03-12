@@ -16,7 +16,6 @@ classdef VerticalStabilizerSimple <  Helicopter
         Omega;  % 旋翼转速
         rho;    % 大气密度
         R;      % 旋翼半径
-        A;      % 旋翼面积
 
     end
     
@@ -28,6 +27,8 @@ classdef VerticalStabilizerSimple <  Helicopter
     end
     
     properties (Dependent)
+        A;      % 旋翼面积
+
         q_VS;
         u_VS;
         v_VS;
@@ -47,6 +48,9 @@ classdef VerticalStabilizerSimple <  Helicopter
             %   
         end
         %--------------Dependent变量---------------
+        function A              = get.A(obj)
+            A = pi*obj.R^2;
+        end
         function q_VS           = get.q_VS(obj)
             q_VS = 1/2*obj.rho*(obj.u_VS^2+obj.v_VS^2+obj.w_VS^2)*obj.K_VS;
         end
@@ -116,7 +120,7 @@ classdef VerticalStabilizerSimple <  Helicopter
             C_nVS       = C_n_delta_r*rad2deg(obj.delta_r);
 
             L_VS = C_lVS*obj.rho*obj.A*obj.VT^2*obj.R;
-            M_VS = 0
+            M_VS = 0;
             N_VS = C_nVS*obj.rho*obj.A*obj.VT^2*obj.R;
 
             obj.L = L_VS;
