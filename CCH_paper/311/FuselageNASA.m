@@ -127,11 +127,11 @@ classdef Fuselage < Helicopter
            					0.00125 	0.00025 	-0.0008];
            	C_YF = interp2(array_beta_F, array_mu, matrix_C_YF,deg2rad(obj.beta_F),obj.mu,'spline');
 			
-			Y 		= C_YF*obj.rho*obj.A*obj.VT^2;
-			Z 		= C_LF*obj.rho*obj.A*obj.VT^2;
+			Y_F 		= C_YF*obj.rho*obj.A*obj.VT^2;
+			Z_F 		= -C_LF*obj.rho*obj.A*obj.VT^2;
 
-			obj.Y 	= Y;
-			obj.Z 	= Z;            
+			obj.Y 	= Y_F;
+			obj.Z 	= Z_F;            
         end
         
         function calculate_torque(obj)

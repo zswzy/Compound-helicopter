@@ -13,6 +13,10 @@ classdef VerticalStabilizerSimple <  Helicopter
         x_VS;
         y_VS;
         z_VS;
+        Omega;  % 旋翼转速
+        rho;    % 大气密度
+        R;      % 旋翼半径
+        A;      % 旋翼面积
 
     end
     
@@ -28,10 +32,12 @@ classdef VerticalStabilizerSimple <  Helicopter
         u_VS;
         v_VS;
         w_VS;
+        V;
+        mu;
+        VT;     % blade tip speed
         
         alpha_VS;   % 迎角
         beta_VS;    % 侧滑角
-        k_r;        %方向舵效率因子
     end
     
     methods
@@ -53,6 +59,12 @@ classdef VerticalStabilizerSimple <  Helicopter
         function w_VS           = get.w_VS(obj)
             w_VS = obj.w + obj.p*obj.y_VS - obj.q*obj.x_VS;
         end
+        function V = get.V(obj)
+            V = sqrt(obj.u_VS^2+obj.v_VS^2+obj.w_VS^2)
+        end
+        function mu = get.mu(obj)
+            mu = obj.V/obj.VT;
+        end
         function alpha_VS       = get.alpha_VS(obj)
             if obj.u_VS == 0
                 alpha_VS = pi/2*sign(obj.w_VS);
@@ -71,33 +83,46 @@ classdef VerticalStabilizerSimple <  Helicopter
                 beta_VS = pi + atan(obj.v_VS/obj.u_VS);
             end
         end
-        function k_r           = get.k_r(obj)
-           k_r = sqrt(obj.s_r/obj.s_VS)*cos(obj.xi); 
+        function VT = get.VT(obj)
+            VT = obj.Omega*obj.R;
         end
         %--------------方法--------------
         function calculate_force(obj)
             %METHOD1 此处显示有关此方法的摘要
+            array_mu = [0 0.1 0.21 0.31];
+            array_C_Y_delta_r = 1e-5*[0   0.5     1.52    2.4];
 
-            % 计算垂尾气流坐标系下的气动力
-            Y_e     = -obj.q_VS*obj.s_VS*obj.a_0*obj.delta_r*obj.k_r;
-            X_VS    = -obj.q_VS*obj.s_VS*obj.delta;
-            Y_VS    = -obj.q_VS*obj.s_VS*obj.beta_VS*obj.a_0 + Y_e;
-            Z_VS    = 0;
-            
-            % 计算机体坐标系下的气动力
-            obj.X   = cos(obj.alpha_VS)*cos(obj.beta_VS) * X_VS ...
-                        -cos(obj.alpha_VS)*sin(obj.beta_VS) * Y_VS ...
-                        -sin(obj.alpha_VS) * Z_VS;
-            obj.Y   = sin(obj.beta_VS) * X_VS ...
-                        +cos(obj.beta_VS) * Y_VS;
-            obj.Z   = sin(obj.alpha_VS)*cos(obj.beta_VS) * X_VS ...
-                        -sin(obj.alpha_VS)*sin(obj.beta_VS) * Y_VS ...
-                        +cos(obj.alpha_VS) * Z_VS;
+            C_Y_delta_r = interp1(array_mu,array_C_Y_delta_r,obj.mu,'spline','extrap');
+            C_YVS       = C_Y_delta_r*rad2deg(obj.delta_r);
+
+            X_VS = 0;
+            Y_VS = C_YVS*obj.rho*obj.A*obj.VT^2;
+            Z_VS = 0;
+
+            obj.X = X_VS;
+            obj.Y = Y_VS;
+            obj.Z = Z_VS;
+
         end
         function calculate_torque(obj)
-            obj.L   = obj.y_VS*obj.Z-obj.z_VS*obj.Y;
-            obj.M   = obj.z_VS*obj.X-obj.x_VS*obj.Z;
-            obj.N   = obj.x_VS*obj.Y-obj.y_VS*obj.X;
+            array_mu = [0 0.1 0.21 0.31];
+            array_C_l_delta_r = 1e-5*[0     0.2     0.5    0.6];
+            array_C_n_delta_r = 1e-5*[0     -0.5    -1.9    -3];
+
+            C_l_delta_r = interp1(array_mu,array_C_l_delta_r,obj.mu,'spline','extrap');
+            C_n_delta_r = interp1(array_mu,array_C_n_delta_r,obj.mu,'spline','extrap');
+
+            C_lVS       = C_l_delta_r*rad2deg(obj.delta_r);
+            C_nVS       = C_n_delta_r*rad2deg(obj.delta_r);
+
+            L_VS = C_lVS*obj.rho*obj.A*obj.VT^2*obj.R;
+            M_VS = 0
+            N_VS = C_nVS*obj.rho*obj.A*obj.VT^2*obj.R;
+
+            obj.L = L_VS;
+            obj.M = M_VS;
+            obj.N = N_VS;
+
         end
     end
 end
