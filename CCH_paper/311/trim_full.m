@@ -462,7 +462,7 @@ cell_InitialStates      = {[0.01,0,0,0,0,0,10,10],[0.01,0,0,0,0,0,3,3], ...
 %% Search the best redundant variables under a specific velocity 3.2 adapting differential evolution jde
 tic
 table_trim_no_redundant_states = readtable('trim_result_no_redundant.csv');
-Rotorcraft.DoubleRotorHelicopter.U         = 130; 
+Rotorcraft.DoubleRotorHelicopter.U         = 84; 
 Rotorcraft.DoubleRotorHelicopter.V         = 0;
 Rotorcraft.DoubleRotorHelicopter.W         = 0;
 Rotorcraft.DoubleRotorHelicopter.U_dot     = 0;
@@ -555,7 +555,7 @@ cell_InitialStates      = {nearest_initial_no_redundant,[0.01,0,0,0,0,0,10,10],[
 %% 3.8 adapting differential evolution jde consider the trim state constrain
 tic
 table_trim_no_redundant_states = readtable('trim_result_no_redundant.csv');
-Rotorcraft.DoubleRotorHelicopter.U         = 70; 
+Rotorcraft.DoubleRotorHelicopter.U         = 130; 
 Rotorcraft.DoubleRotorHelicopter.V         = 0;
 Rotorcraft.DoubleRotorHelicopter.W         = 0;
 Rotorcraft.DoubleRotorHelicopter.U_dot     = 0;
@@ -587,6 +587,8 @@ problem             = struct;
 problem.objective   = @(x) trim_power_state(Rotorcraft,nearest_initial_no_redundant,x(1),1,x(2),x(3),x(4),x(5));
 problem.lb          = [0,deg2rad(-25),deg2rad(-30),deg2rad(-1),deg2rad(-1)];
 problem.ub          = [deg2rad(40),deg2rad(25),deg2rad(30),deg2rad(1),deg2rad(4.5)];
+problem.theta_0_lb  = deg2rad(5);
+problem.theta_0_ub  = deg2rad(25);
 problem.dimension   = 5;
 
 [x,array_power_best(1),~] = jde_par_con(problem,options);
@@ -609,6 +611,8 @@ if Rotorcraft.DoubleRotorHelicopter.U < 50
     problem.objective   = @(x) trim_power_state(Rotorcraft,nearest_initial_no_redundant,0,0,x(1),x(2),x(3),x(4));
     problem.lb          = [deg2rad(-25),deg2rad(-30),deg2rad(-1),deg2rad(-1)];
     problem.ub          = [deg2rad(25),deg2rad(30),deg2rad(1),deg2rad(4.5)];
+    problem.theta_0_lb  = deg2rad(5);
+    problem.theta_0_ub  = deg2rad(25);
     problem.dimension   = 4;
 
     [array_redundant_var_best(2,3:6),array_power_best(2),~] = jde_par(problem,options);
