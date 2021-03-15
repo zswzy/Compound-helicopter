@@ -11,7 +11,7 @@ table_theta_preconfig = readtable('theta_preconfig.csv');
 run init_build.m
 
 %% test program with zeros force theta_0_prop
-Rotorcraft.DoubleRotorHelicopter.U         = 50;
+Rotorcraft.DoubleRotorHelicopter.U         = 100;
 Rotorcraft.DoubleRotorHelicopter.V         = 0;
 Rotorcraft.DoubleRotorHelicopter.W         = 0;
 Rotorcraft.DoubleRotorHelicopter.U_dot     = 0;
@@ -66,7 +66,7 @@ theta_0_prop = fmincon(problem)
 
 %% let's try to set theta to our preconfig value
 
-Rotorcraft.DoubleRotorHelicopter.U         = 80;
+Rotorcraft.DoubleRotorHelicopter.U         = 70;
 Rotorcraft.DoubleRotorHelicopter.V         = 0;
 Rotorcraft.DoubleRotorHelicopter.W         = 0;
 Rotorcraft.DoubleRotorHelicopter.U_dot     = 0;
@@ -85,16 +85,17 @@ zero_force_theta_0_prop = table_propeller_config.zeros_force_theta_0(table_prope
 % find the preconfig theta
 theta_specified = table_theta_preconfig.theta_preconfig(table_theta_preconfig.U==Rotorcraft.DoubleRotorHelicopter.U);
 
-problem.objective   = @(x) (theta_specified-find_theta_given_prop(Rotorcraft, x, deg2rad(-5), nearest_initial_no_redundant))^2*1e3;
+problem.objective   = @(x) (theta_specified-find_theta_given_prop(Rotorcraft, x, 0, nearest_initial_no_redundant))^2*1e3;
 problem.x0          = zero_force_theta_0_prop+deg2rad(5);
 problem.lb          = zero_force_theta_0_prop;
 problem.ub          = zero_force_theta_0_prop+deg2rad(25);
 problem.solver      = 'fmincon';
 problem.options     = optimset('Display','iter','Algorithm','interior-point');
 
+
 theta_0_prop = fmincon(problem)
 
-[theta,x_trim,Rotorcraft,power_total] = find_theta_given_prop(Rotorcraft,theta_0_prop, deg2rad(-5), nearest_initial_no_redundant);
+[theta,x_trim,Rotorcraft,power_total] = find_theta_given_prop(Rotorcraft,theta_0_prop, 0, nearest_initial_no_redundant);
 info_dynamics(Rotorcraft)
 
 %% 3.15 let's iterate the U and find every theta_0_prop, and value of X_prop
@@ -180,19 +181,41 @@ VariableNames = {'U','theta_0','theta_diff','theta_1c','theta_1s','theta','phi',
 table_trim_states = array2table(matrix_trim_states,'VariableNames',VariableNames);
 writetable(table_trim_states,'trim_result_redundant_prop.csv');
 
-
+% if want to see some results...
+figure(1)
+plot(table_trim_states.U,table_trim_states.power_total);
+xlabel('U'); ylabel('Power'); title('U-Power required'); grid on;
+figure(2)
+plot(table_trim_states.U,table_trim_states.T_prop);
+xlabel('U'); ylabel('Propeller thrust (N)'); title('U-Propeller thrust'); grid on;
+figure(3)
+plot(table_trim_states.U,rad2deg(table_trim_states.theta));
+xlabel('U'); ylabel('pitch angle (deg)'); title('U-pitch angle'); grid on;
 %% Let's try another strategy
 % we vary at the same time delta_e and theta_0_prop, to satisfy theta, but
 % also to observe the power variation
 
 % define the variation domain
-array_delta_e = linspace(deg2rad(-5),deg2rad(5),3);
+array_delta_e = linspace(deg2rad(-5),deg2rad(20),8);
 [~, number_of_delta_e] = size(array_delta_e);
 array_theta_0_prop = zeros(size(array_delta_e));
 array_power_total = zeros(size(array_delta_e));
 
 for k  = 1:number_of_delta_e
+    table_trim_states = readtable('trim_result_no_redundant.csv');
+    table_propeller_config = readtable('propeller_config.csv');
+    table_theta_preconfig = readtable('theta_preconfig.csv');
+    
     disp(array_delta_e(k))
+    
+    Rotorcraft = struct;
+    Rotorcraft.DoubleRotorHelicopter    = DoubleRotorHelicopter;
+    Rotorcraft.LowerRotor               = LowerRotor;
+    Rotorcraft.UpperRotor               = UpperRotor;
+    Rotorcraft.Prop                     = Prop;
+    Rotorcraft.Fus                      = Fus;
+    Rotorcraft.HorStab                  = HorStab;  
+    Rotorcraft.VerStab                  = VerStab;
     Rotorcraft.DoubleRotorHelicopter.U         = 80;
     Rotorcraft.DoubleRotorHelicopter.V         = 0;
     Rotorcraft.DoubleRotorHelicopter.W         = 0;
@@ -205,23 +228,26 @@ for k  = 1:number_of_delta_e
     Rotorcraft.DoubleRotorHelicopter.p_dot     = 0;
     Rotorcraft.DoubleRotorHelicopter.q_dot     = 0;
     Rotorcraft.DoubleRotorHelicopter.r_dot     = 0;
-
+    
     nearest_initial_no_redundant = table_trim_states{table_trim_states.U == fix(Rotorcraft.DoubleRotorHelicopter.U),2:10};
     zero_force_theta_0_prop = table_propeller_config.zeros_force_theta_0(table_propeller_config.U == ceil(Rotorcraft.DoubleRotorHelicopter.U));
 
     % find the preconfig theta
     theta_specified = table_theta_preconfig.theta_preconfig(table_theta_preconfig.U==Rotorcraft.DoubleRotorHelicopter.U);
 
-    problem.objective   = @(x) (theta_specified-find_theta_given_prop(Rotorcraft, x, array_delta_e(k), nearest_initial_no_redundant))^2*1e3;
+    % find the corresp theta_0_prop
+    problem = struct;
+    problem.objective   = @(x) (theta_specified-find_theta_given_prop(Rotorcraft, x, 0, nearest_initial_no_redundant))^2*1e3;
     problem.x0          = zero_force_theta_0_prop+deg2rad(5);
     problem.lb          = zero_force_theta_0_prop;
     problem.ub          = zero_force_theta_0_prop+deg2rad(25);
     problem.solver      = 'fmincon';
-    problem.options     = optimset('Display','iter','Algorithm','interior-point');
-
+    problem.options     = optimset('Display','iter','Algorithm','sqp');
     theta_0_prop = fmincon(problem);
 
+    % get the trim states
     [theta,x_trim,Rotorcraft,power_total] = find_theta_given_prop(Rotorcraft,theta_0_prop, array_delta_e(k), nearest_initial_no_redundant);
+
     % record 
     array_theta_0_prop(k)   = theta_0_prop;
     array_power_total(k)    = power_total;
