@@ -35,11 +35,11 @@ VerStab                 = Rotorcraft.VerStab;
 % 变量赋值/初始化
 LowerRotor.v_i      = v_i1;
 LowerRotor.theta_0  = theta_0 - theta_diff;
-LowerRotor.theta_1c = LowerRotor.direction * (theta_1c - LowerRotor.theta_1c_diff);
+LowerRotor.theta_1c = theta_1c - LowerRotor.theta_1c_diff;
 LowerRotor.theta_1s = theta_1s - LowerRotor.theta_1s_diff;
 UpperRotor.v_i      = v_i2;
 UpperRotor.theta_0  = theta_0 + theta_diff;
-UpperRotor.theta_1c = UpperRotor.direction * (theta_1c + LowerRotor.theta_1c_diff);
+UpperRotor.theta_1c = theta_1c + LowerRotor.theta_1c_diff;
 UpperRotor.theta_1s = theta_1s + LowerRotor.theta_1s_diff;
 % 旋翼干扰诱导速度
 LowerRotor.v_0      = LowerRotor.v_i + LowerRotor.delta_1 * UpperRotor.v_i;

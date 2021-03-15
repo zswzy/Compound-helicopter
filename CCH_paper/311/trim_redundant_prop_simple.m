@@ -45,7 +45,7 @@ cell_InitialStates      = {[0.01,0,0,0,0,0,10,10],[0.01,0,0,0,0,0,3,3], ...
  
 %% 不同速度下的配平
 
-array_U = 0:130;
+array_U = 0:100;
 [~,number_of_U] = size(array_U);
 matrix_trim_states = zeros(number_of_U,27);
 redundant_var_best = [0,0];
@@ -56,7 +56,7 @@ bar = waitbar(0,'迭代求解中...');
 tic;
 time_elapsed = 0;
 
-for j = 1:number_of_U
+parfor j = 1:number_of_U
     disp(['U = ', num2str(array_U(j))])
     % 建立结构体(并行计算需要）
     Rotorcraft = struct;

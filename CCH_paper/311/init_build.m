@@ -1,6 +1,6 @@
-% 建立对象
+% initialization
 
-% 直升机
+% Main helicopter
 DoubleRotorHelicopter       = Helicopter();
 DoubleRotorHelicopter.GW    = 5500;
 DoubleRotorHelicopter.GWF   = 5500*9.81;
@@ -9,7 +9,7 @@ DoubleRotorHelicopter.Iy    = 26844;
 DoubleRotorHelicopter.Iz    = 23048;
 DoubleRotorHelicopter.Ixz   = 0;
 
-% 下旋翼
+% Lower rotor
 LowerRotor = RotorFixed('anticlockwise'); % 下旋翼逆时针转， 为默认情况
 LowerRotor.a_0          = 7.6;           % 主旋翼升力线斜率,NACA0012
 LowerRotor.b            = 3;             % 旋翼桨叶数
@@ -35,7 +35,7 @@ LowerRotor.M_beta       = 123;           % 主旋翼对挥舞铰的质量静矩
 LowerRotor.Omega        = 35.9;          % 主旋翼转速rad/s
 LowerRotor.R            = 5.49;          % 主旋翼半径 m
 
-% 上旋翼
+% upper rotor
 UpperRotor = RotorFixed('clockwise'); % 上旋翼顺时针转
 UpperRotor.a_0          = 7.6;           % 主旋翼升力线斜率,NACA0012
 UpperRotor.b            = 3;             % 旋翼桨叶数
@@ -61,7 +61,7 @@ UpperRotor.M_beta       = 123;           % 主旋翼对挥舞铰的质量静矩
 UpperRotor.Omega        = 35.9;          % 主旋翼转速rad/s
 UpperRotor.R            = 5.49;          % 主旋翼半径 m
 
-% 推进桨
+% propeller
 Prop = PropellerNUAA();
 Prop.delta              = 0.008;
 Prop.e_oswald           = 0.8;
@@ -74,40 +74,33 @@ Prop.Omega              = 162;
 Prop.R                  = 1.3;
 
 % 机身
-Fus = Fuselage();
+Fus = FuselageZhang();
 Fus.rho                 = rho;
 Fus.R                   = 5.49;
-Fus.A                   = pi*5.49^2;
+Fus.Omega               = 35.9;
 Fus.s_F                 = (5.6+5.6)*0.1+pi*1.5^2;
 Fus.x_F                 = 0;
 Fus.y_F                 = 0;
 Fus.z_F                 = 0;
 
-% 平尾
-HorStab = HorizontalStabilizerSimple();
-HorStab.a_0             = 3.2;
-HorStab.delta           = 0.001;
+% Horizontal Stabilizer
+HorStab = HorizontalStabilizerNASA();
 HorStab.rho             = rho;
-HorStab.s_HS            = 5.6;
-HorStab.s_e             = 5.6*0.1;
-HorStab.xi              = 0;
-HorStab.K_HS            = 0.8;
+HorStab.R               = 5.49;
+HorStab.Omega           = 35.9;
 HorStab.x_HS            = -6.8;
 HorStab.y_HS            = 0;
 HorStab.z_HS            = 0.2;
 
-% 垂尾
-VerStab = VerticalStabilizerSimple();
-VerStab.a_0             = 2;
-VerStab.delta           = 0.001;
+% Vertical Stabilizer
+VerStab = VerticalStabilizerNASA();
 VerStab.rho             = rho;
-VerStab.s_VS            = 5.6;
-VerStab.s_r             = 5.6*0.1;
-VerStab.xi              = 0;
-VerStab.K_VS            = 0.8;
+VerStab.R               = 5.49;
+VerStab.Omega           = 35.9;
 VerStab.x_VS            = -6.8;
 VerStab.y_VS            = 0;
 VerStab.z_VS            = -0.5;
+
 
 % 建立结构体
 Rotorcraft.DoubleRotorHelicopter    = DoubleRotorHelicopter;

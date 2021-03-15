@@ -23,7 +23,7 @@ Rotorcraft.DoubleRotorHelicopter.q_dot     = 0;
 Rotorcraft.DoubleRotorHelicopter.r_dot     = 0;
 
 % x = [theta_0,theta_diff,theta_1c,theta_1s,theta,phi,v_i1,v_i2]
-options                 = optimset('Display','iter','TolFun',1e-15,'Maxiter',100,'Algorithm','levenberg-marquardt' ,'MaxFunEvals',20000);
+options                 = optimset('Display','iter','TolFun',1e-15,'Maxiter',50,'Algorithm','levenberg-marquardt' ,'MaxFunEvals',20000);
 cell_InitialStates      = {[0.01,0,0,0,0,0,10,10],[0.01,0,0,0,0,0,3,3], ...
                             [0.1,0,0,0,0,0,10,10],[0.1,0,0,0,0,0,3,3], ...
                             [0.2,0,0,0,0,0,10,10],[0.2,0,0,0,0,0,3,3], ...
@@ -45,8 +45,9 @@ cell_InitialStates      = {[0.01,0,0,0,0,0,10,10],[0.01,0,0,0,0,0,3,3], ...
                                 deg2rad(0));            % theta_1s_diff
                             
 %% 不同速度下的配平
-number_of_U = 131;
-array_U = linspace(0,130,number_of_U);
+
+array_U = 0:100;
+[~,number_of_U] = size(array_U);
 matrix_trim_states = zeros(number_of_U,27);
 % U,theta_0,theta_diff,theta_1c,theta_1s,theta,phi,v_i1,v_i2,Prop_theta_0,Prop_isEnable,delta_e,delta_r,theta_1c_diff,theta_1s_diff,v_01,v_02,beta_01,beta_1c1,beta_1s1,beta_02,beta_1c2,beta_1s2,power_total_LowerRotor,power_total_UpperRotor,power_total_Prop,power_total
 x_trim_last = [0.01,0,0,0,0,0,10,10]; % 上一次的解
@@ -76,7 +77,7 @@ for j = 1:number_of_U
     Rotorcraft.DoubleRotorHelicopter.r_dot     = 0;
 
     % x = [theta_0,theta_diff,theta_1c,theta_1s,theta,phi,v_i1,v_i2]
-    options                 = optimset('Display','iter','TolFun',1e-15,'Maxiter',100,'Algorithm','levenberg-marquardt' ,'MaxFunEvals',20000);
+    options                 = optimset('Display','iter','TolFun',1e-15,'Maxiter',50,'Algorithm','levenberg-marquardt' ,'MaxFunEvals',20000);
     cell_InitialStates      = {x_trim_last,[0.01,0,0,0,0,0,10,10],[0.01,0,0,0,0,0,3,3], ...
                                 [0.1,0,0,0,0,0,10,10],[0.1,0,0,0,0,0,3,3], ...
                                 [0.2,0,0,0,0,0,10,10],[0.2,0,0,0,0,0,3,3], ...
@@ -114,7 +115,7 @@ for j = 1:number_of_U
                                     power_total];
         x_trim_last = x_trim;
     else
-        matrix_trim_states(j,:) = [array_U(j) nan*ones(1,20)];
+        matrix_trim_states(j,:) = [array_U(j) nan*ones(1,26)];
     end
 end
 
@@ -153,13 +154,13 @@ figure(1)
 subplot(1,2,1)
 plot(array_U,rad2deg(array_theta),'linewidth',1.5)
 hold on
-plot([100 100], get(gca, 'YLim'), '--r', 'LineWidth', 1)
+plot([80 80], get(gca, 'YLim'), '--r', 'LineWidth', 1)
 hold off
 xlabel('U'); ylabel('\theta(deg)'); title('U-\theta'); grid on;
 subplot(1,2,2)
 plot(array_U,rad2deg(array_phi),'linewidth',1.5)
 hold on
-plot([100 100], get(gca, 'YLim'), '--r', 'LineWidth', 1)
+plot([80 80], get(gca, 'YLim'), '--r', 'LineWidth', 1)
 hold off
 xlabel('U'); ylabel('\phi(deg)'); title('U-\phi'); grid on;
 
@@ -167,25 +168,25 @@ figure(2)
 subplot(2,2,1)
 plot(array_U,rad2deg(array_theta_0),'linewidth',1.5)
 hold on
-plot([100 100], get(gca, 'YLim'), '--r', 'LineWidth', 1)
+plot([80 80], get(gca, 'YLim'), '--r', 'LineWidth', 1)
 hold off
 xlabel('U'); ylabel('\theta_0 (deg)'); title('U-\theta_0'); grid on;
 subplot(2,2,2)
 plot(array_U,rad2deg(array_theta_diff),'linewidth',1.5)
 hold on
-plot([100 100], get(gca, 'YLim'), '--r', 'LineWidth', 1)
+plot([80 80], get(gca, 'YLim'), '--r', 'LineWidth', 1)
 hold off
 xlabel('U'); ylabel('\theta_{diff} (deg)'); title('U-\theta_{diff}'); grid on;
 subplot(2,2,3)
 plot(array_U,rad2deg(array_theta_1c),'linewidth',1.5)
 hold on
-plot([100 100], get(gca, 'YLim'), '--r', 'LineWidth', 1)
+plot([80 80], get(gca, 'YLim'), '--r', 'LineWidth', 1)
 hold off
 xlabel('U'); ylabel('\theta_{1c} (deg)'); title('U-\theta_{1c}'); grid on;
 subplot(2,2,4)
 plot(array_U,rad2deg(array_theta_1s),'linewidth',1.5)
 hold on
-plot([100 100], get(gca, 'YLim'), '--r', 'LineWidth', 1)
+plot([80 80], get(gca, 'YLim'), '--r', 'LineWidth', 1)
 hold off
 xlabel('U'); ylabel('\theta_{1s} (deg)'); title('U-\theta_{1s}'); grid on;
 
@@ -194,7 +195,7 @@ plot(array_U,array_v_01,'linewidth',1.5)
 hold on
 plot(array_U,array_v_02,'linewidth',1.5)
 hold on
-plot([100 100], get(gca, 'YLim'), '--r', 'LineWidth', 1)
+plot([80 80], get(gca, 'YLim'), '--r', 'LineWidth', 1)
 hold off
 legend('v_{01}','v_{02}','Location','best');
 xlabel('U'); ylabel('v_0 (m/s)'); title('U-v_0'); grid on;
@@ -204,7 +205,7 @@ plot(array_U,rad2deg(array_beta_01),'linewidth',1.5)
 hold on 
 plot(array_U,rad2deg(array_beta_02),'linewidth',1.5)
 hold on
-plot([100 100], get(gca, 'YLim'), '--r', 'LineWidth', 1)
+plot([80 80], get(gca, 'YLim'), '--r', 'LineWidth', 1)
 hold off
 legend('\beta_{01}','\beta_{02}','Location','best')
 xlabel('U'); ylabel('\beta_{01},\beta_{02}(deg)'); title('U-\beta_0'); grid on;
@@ -215,7 +216,7 @@ plot(array_U,rad2deg(array_beta_1c1),'linewidth',1.5)
 hold on 
 plot(array_U,rad2deg(array_beta_1c2),'linewidth',1.5)
 hold on
-plot([100 100], get(gca, 'YLim'), '--r', 'LineWidth', 1)
+plot([80 80], get(gca, 'YLim'), '--r', 'LineWidth', 1)
 hold off
 legend('\beta_{1c1}','\beta_{1c2}','Location','best')
 xlabel('U'); ylabel('\beta_{1c1},\beta_{1c2}(deg)'); title('U-\beta_{1c}'); grid on;
@@ -224,7 +225,7 @@ plot(array_U,rad2deg(array_beta_1s1),'linewidth',1.5)
 hold on 
 plot(array_U,rad2deg(array_beta_1s2),'linewidth',1.5)
 hold on
-plot([100 100], get(gca, 'YLim'), '--r', 'LineWidth', 1)
+plot([80 80], get(gca, 'YLim'), '--r', 'LineWidth', 1)
 hold off
 legend('\beta_{1s1}','\beta_{1s2}','Location','best')
 xlabel('U'); ylabel('\beta_{1s1},\beta_{1s2}(deg)'); title('U-\beta_{1s}'); grid on;
@@ -236,7 +237,7 @@ plot(array_U,array_power_total_UpperRotor/1000,'linewidth',1.5)
 hold on
 plot(array_U,array_power_total/1000,'linewidth',1.5)
 hold on
-plot([100 100], get(gca, 'YLim'), '--r', 'LineWidth', 1)
+plot([80 80], get(gca, 'YLim'), '--r', 'LineWidth', 1)
 hold off
 legend('Power_{lower rotor}','Power_{upper rotor}','Power_{total}','Location','best');
 xlabel('U'); ylabel('Power (kW)'); title('U-Power required'); grid on;

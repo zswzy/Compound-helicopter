@@ -62,16 +62,29 @@ UpperRotor.Omega        = 35.9;          % 主旋翼转速rad/s
 UpperRotor.R            = 5.49;          % 主旋翼半径 m
 
 % 推进桨
-Prop = PropellerNUAA();
-Prop.delta              = 0.008;
+% Prop = PropellerNUAA();
+% Prop.delta              = 0.008;
+% Prop.e_oswald           = 0.8;
+% Prop.rho                = rho;
+% Prop.s                  = 0.2;
+% Prop.x_PR                = -7.66;
+% Prop.y_PR                = 0;
+% Prop.z_PR                = 0;
+% Prop.Omega              = 162;
+% Prop.R                  = 1.3;
+
+Prop = PropellerKevin();
+Prop.c = 0.2;
 Prop.e_oswald           = 0.8;
-Prop.rho                = rho;
-Prop.s                  = 0.2;
-Prop.x_PR                = -7.66;
-Prop.y_PR                = 0;
-Prop.z_PR                = 0;
+Prop.Nb                 = 4;
 Prop.Omega              = 162;
 Prop.R                  = 1.3;
+Prop.s                  = 0.2;
+Prop.theta_t            = deg2rad(-30);
+Prop.rho                = 1.2;
+Prop.x_PR               = -7.66;
+Prop.y_PR               = 0;
+Prop.z_PR               = 0;
 
 % 机身
 Fus = Fuselage();

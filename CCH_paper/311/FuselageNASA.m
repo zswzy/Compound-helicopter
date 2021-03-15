@@ -1,4 +1,4 @@
-classdef Fuselage < Helicopter
+classdef FuselageNASA < Helicopter
     %FUSELAGE 机身
     %   
     properties (GetAccess = protected)
@@ -7,7 +7,6 @@ classdef Fuselage < Helicopter
         y_F;
         z_F;
         Omega;  % 旋翼转速
-        rho;	% 大气密度
         R;      % 旋翼半径
         
     end
@@ -20,7 +19,7 @@ classdef Fuselage < Helicopter
         u_F;
         v_F;
         w_F;
-        V;
+        V_inf; 
         mu;
         u_dot_F;
         v_dot_F;
@@ -42,7 +41,7 @@ classdef Fuselage < Helicopter
     end
     
     methods
-        function obj = Fuselage()
+        function obj = FuselageNASA()
             %FUSELAGE 构造此类的实例
         end
         function A = get.A(obj)
@@ -57,11 +56,11 @@ classdef Fuselage < Helicopter
         function w_F = get.w_F(obj)
             w_F = obj.w;
         end
-        function V = get.V(obj)
-        	V = sqrt(obj.u_F^2+obj.v_F^2+obj.w_F^2)
+        function V_inf = get.V_inf(obj)
+        	V_inf = sqrt(obj.u_F^2+obj.v_F^2+obj.w_F^2);
         end
         function mu = get.mu(obj)
-        	mu = obj.V*cos(obj.alpha_F)/obj.VT;
+        	mu = obj.V_inf*cos(obj.alpha_F)/obj.VT;
         end
         function u_dot_F = get.u_dot_F(obj)
             u_dot_F = obj.u_dot;
@@ -120,24 +119,29 @@ classdef Fuselage < Helicopter
             % C_LF
             
             array_alpha_F = deg2rad([-6 -1 4]);
-            array_mu = [0.1 0.21 0.31];
-            matrix_C_LF = [	0.0095 		0.0101 		0.0105;
+            array_mu = [0   0.1 0.21 0.31];
+            matrix_C_LF = [	0           0           0;
+                            0.0095 		0.0101 		0.0105;
             				0.008 		0.0102 		0.0122;
             				8.29e-4 	5.16e-3 	9.3e-3]; % every line is a same mu
             C_LF = interp2(array_alpha_F, array_mu, matrix_C_LF,obj.alpha_F,obj.mu,'spline');
 
            	array_beta_F = deg2rad([-5 0 5]);
-           	matrix_C_YF = [	0.0004 		0.0001 		-0.0002;
+           	matrix_C_YF = [	0           0           0;
+                            0.0004 		0.0001 		-0.0002;
            					0.0007 		0.0002 		-0.0005;
            					0.00125 	0.00025 	-0.0008];
            	C_YF = interp2(array_beta_F, array_mu, matrix_C_YF,obj.beta_F,obj.mu,'spline');
 			
 			array_C_LF = [0.006	0.008	0.0095	0.0101	0.0102	0.0105	0.0122	0.01401];
-			matrix_C_DF = [	0.06724		0.01664		0.001		0.0001		2.475e-4	0.0012		0.02105		0.06918;
+			matrix_C_DF = [ 0           0           0           0           0           0           0           0;
+                            0.06724		0.01664		0.001		0.0001		2.475e-4	0.0012		0.02105		0.06918;
 							3.3955e-3	0.0009		1.0511e-4	4.5568e-5	0.00005		8.7906e-5	0.001		3.274e-3;
 							0.0008		1.4652e-4	1.1707e-4	0			6.8113e-6	3.4766e-5	4.0627e-4	0.0012];
 			C_DF = interp2(array_C_LF, array_mu, matrix_C_DF,C_LF,obj.mu,'spline');
-
+            
+            C_LF
+            C_DF
 			X_F 		= -C_DF*obj.rho*obj.A*obj.VT^2;
 			Y_F 		= C_YF*obj.rho*obj.A*obj.VT^2;
 			Z_F 		= -C_LF*obj.rho*obj.A*obj.VT^2;
@@ -151,11 +155,13 @@ classdef Fuselage < Helicopter
             % calculate_torque
 
             array_beta_F = deg2rad([-5 0 5]);
-            array_mu = [0.1 0.21 0.31];
-            matrix_C_lF = [	0.00018 	-0.00001 	-0.0002;
+            array_mu = [0   0.1 0.21 0.31];
+            matrix_C_lF = [	0           0           0;
+                            0.00018 	-0.00001 	-0.0002;
             				0.00023 	0.000005 	-0.00023;
             				0.0003 		0 			-0.00028;];
-            matrix_C_nF = [	-0.0001		0			0.00004;
+            matrix_C_nF = [ 0           0           0;
+                            -0.0001		0			0.00004;
             				-0.0001		0.00001		0.00017;
             				-0.00012	0.00001		0.00017;];
 
@@ -163,11 +169,12 @@ classdef Fuselage < Helicopter
             C_nF = interp2(array_beta_F, array_mu, matrix_C_nF,obj.beta_F,obj.mu,'spline');
 
             array_alpha_F = deg2rad([-6 -1 4]);
-            matrix_C_mF = [	-0.0002		0.0001		0.0003;
+            matrix_C_mF = [	0           0           0
+                            -0.0002		0.0001		0.0003;
             				-0.0004		-0.00003	0.0004;
             				9.46e-4		3.36e-4		2.6e-5;];
             C_mF = interp2(array_alpha_F, array_mu, matrix_C_mF,obj.alpha_F,obj.mu,'spline');
-
+            
             L_F = C_lF*obj.rho*obj.A*obj.VT^2*obj.R;
             M_F = C_mF*obj.rho*obj.A*obj.VT^2*obj.R;
             N_F = C_nF*obj.rho*obj.A*obj.VT^2*obj.R;

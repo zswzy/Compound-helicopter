@@ -8,7 +8,7 @@ table_trim_states = readtable('trim_result_no_redundant.csv');
 run init_build.m
 
 %% hover/foward trim X,Y,Z,L,M,N=0,[theta_0,theta_diff,theta_1c,theta_1s,theta,phi,v_i1,v_i2]
-Rotorcraft.DoubleRotorHelicopter.U         = 84;
+Rotorcraft.DoubleRotorHelicopter.U         = 100;
 Rotorcraft.DoubleRotorHelicopter.V         = 0;
 Rotorcraft.DoubleRotorHelicopter.W         = 0;
 Rotorcraft.DoubleRotorHelicopter.U_dot     = 0;
@@ -36,7 +36,7 @@ cell_InitialStates      = {nearest_initial_no_redundant [0.01,0,0,0,0,0,10,10],[
                                 2, ...                  % LowerRotor.inteference
                                 2, ...                  % UpperRotor.inteference
                                 deg2rad(20), ...        % Prop.theta_0
-                                0, ...                  % Prop.isEnable
+                                1, ...                  % Prop.isEnable
                                 1, ...                  % Fus.isEnable
                                 deg2rad(0), ...         % HorStab.delta_e
                                 1, ...                  % HorStab.isEnable
