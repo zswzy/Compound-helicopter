@@ -59,7 +59,7 @@ for k = 1:number_of_U
 end
 
 %%
-[x_trim,Rotorcraft,power_total] = calculate_from_trim_table(table_trim_no_redundant(k,:))
+%[x_trim,Rotorcraft,power_total] = calculate_from_trim_table(table_trim_no_redundant(k,:))
 %% draw figure
 figure(1)
 plot(array_U,power_total_no_redundant,array_U,power_total_redundant_prop,'linewidth',2)
