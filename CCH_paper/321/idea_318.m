@@ -181,12 +181,11 @@ table_trim_states = array2table(matrix_trim_states,'VariableNames',VariableNames
 writetable(table_trim_states,'trim_result_redundant_prop.csv');
 
 %% Helper dataset: for different U, vary delta_e, get power and rotor load
-U = 20;
-array_delta_e           = [deg2rad(-20):deg2rad(0.2):deg2rad(2)];
+U = 50;
+array_delta_e           = [deg2rad(-20):deg2rad(0.2):deg2rad(5)];
 [~, number_of_delta_e]      = size(array_delta_e); 
 array_power_total           = inf(size(array_delta_e));
 array_load_rotor            = inf(size(array_delta_e));
-matrix_trim_states = zeros(number_of_delta_e,30);
 
 parfor k  = 1:number_of_delta_e
     delta_e = array_delta_e(k); 
@@ -234,40 +233,16 @@ parfor k  = 1:number_of_delta_e
     theta_0_prop = fmincon(problem);
 
     % get the trim states
-    [~,x_trim,Rotorcraft,power_total] = find_theta_given_prop(Rotorcraft,[theta_0_prop, delta_e, 0], nearest_initial);
+    [~,~,Rotorcraft,power_total] = find_theta_given_prop(Rotorcraft,[theta_0_prop, delta_e, 0], nearest_initial);
 
     % record 
     array_power_total(k)    = power_total;  
     array_load_rotor(k)     = Rotorcraft.LowerRotor.T_blade_element+Rotorcraft.UpperRotor.T_blade_element;
-    matrix_trim_states(k,:) = [U ...
-                                    x_trim ...
-                                    theta_0_prop 1 delta_e 0 0 0 ...
-                                    Rotorcraft.LowerRotor.v_0 ...
-                                    Rotorcraft.UpperRotor.v_0 ...
-                                    Rotorcraft.LowerRotor.beta_0 ...
-                                    Rotorcraft.LowerRotor.beta_1c ...
-                                    Rotorcraft.LowerRotor.beta_1s ...
-                                    Rotorcraft.UpperRotor.beta_0 ...
-                                    Rotorcraft.UpperRotor.beta_1c ...
-                                    Rotorcraft.UpperRotor.beta_1s ...
-                                    Rotorcraft.LowerRotor.Power_total ...
-                                    Rotorcraft.UpperRotor.Power_total ...
-                                    Rotorcraft.Prop.Power_resist ...
-                                    power_total ...
-                                    Rotorcraft.Prop.T_blade_element ...
-                                    Rotorcraft.LowerRotor.T_blade_element+Rotorcraft.UpperRotor.T_blade_element];
-
 end
 
 % write file
-VariableNames = {'U','theta_0','theta_diff','theta_1c','theta_1s','theta','phi','v_i1','v_i2','v_iprop', ...
-                'Prop_theta_0','Prop_isEnable','delta_e','delta_r','theta_1c_diff','theta_1s_diff', ...
-                'v_01','v_02', ...
-                'beta_01','beta_1c1','beta_1s1','beta_02','beta_1c2','beta_1s2', ...
-                'power_total_LowerRotor', 'power_total_UpperRotor', 'power_total_Prop' ,'power_total',...
-                'T_prop','T_rotor'};
-            
-table_trim_states = array2table(matrix_trim_states,'VariableNames',VariableNames);
+VariableNames = {'delta_e','power_total','T_rotor'};
+table_trim_states = array2table([array_delta_e',array_power_total',array_load_rotor'],'VariableNames',VariableNames);
 filename = ['trim_redundant_prop_var_delta_e_U',num2str(U),'.csv'];
 writetable(table_trim_states, filename);
 
@@ -468,7 +443,7 @@ for m = 1:number_of_U
     if U <= 30  % no delta_e under 30 m/s
         array_delta_e           = 0;
     else
-        array_delta_e           = linspace(deg2rad(-15),deg2rad(0),80);
+        array_delta_e           = [linspace(deg2rad(-15),deg2rad(-10),12),linspace(deg2rad(-10),deg2rad(1),72)];
     end
     
     [~, number_of_delta_e]      = size(array_delta_e); 
@@ -635,6 +610,7 @@ for m = 1:number_of_U
                                 
 end
 
+%%
 % write file
 VariableNames = {'U','theta_0','theta_diff','theta_1c','theta_1s','theta','phi','v_i1','v_i2','v_iprop', ...
                 'Prop_theta_0','Prop_isEnable','delta_e','delta_r','theta_1c_diff','theta_1s_diff', ...
@@ -644,5 +620,5 @@ VariableNames = {'U','theta_0','theta_diff','theta_1c','theta_1s','theta','phi',
                 'T_prop','T_rotor'};
 table_trim_states = array2table(matrix_trim_states,'VariableNames',VariableNames);
 %%
-writetable(table_trim_states,'trim_redundant_prop_delta_e_power_5load_.csv');
+writetable(table_trim_states,'trim_redundant_prop_delta_e_power_5load.csv');
 

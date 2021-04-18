@@ -181,7 +181,7 @@ table_trim_states = array2table(matrix_trim_states,'VariableNames',VariableNames
 writetable(table_trim_states,'trim_result_redundant_prop.csv');
 
 %% Helper dataset: for different U, vary delta_e, get power and rotor load
-U = 20;
+U = 81;
 array_delta_e           = [deg2rad(-20):deg2rad(0.2):deg2rad(2)];
 [~, number_of_delta_e]      = size(array_delta_e); 
 array_power_total           = inf(size(array_delta_e));
